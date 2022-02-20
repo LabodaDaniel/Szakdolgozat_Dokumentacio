@@ -1,12 +1,49 @@
-\Chapter{Felhasznált technológiák}
+\Chapter{Alapok és technológiák}
 
-\Section{Egyoldalas alkalmazások}
+\Section{Alapok}
+Ahhoz, hogy a szakdolgozat értelmet kapjon, mindenképp tisztázni kell néhány, a pókerrel kapcsolatos alapfogalmat, valamint a játék menetét. Ebben a szakaszban ezekről fogok írni.
+
+\subsection{A játék menete}
+A játék menetét illetően próbálok csak a számunkra releváns részletekre koncentrálni. Egy játék sok leosztásból áll, attól függ milyen típust játszunk. A játékosok száma is eltérő, általában 5 és 10 közötti látszámmal szokták játszani. Minden játékosnak kezdetben egyenlő összegű zsetonkészlete van, amivel játszhat. Mindig van egy osztó, akit az első leosztásnál solrsolnak, a tőle bal oldalon ülő játékos a kis vak, az osztótól balra a második játékos pedig a nagy vak. Ha van kijelölt osztó az asztalnál, akkor egy gombbal jelzik, ki birtokolja az osztó pozíciót, ez a gomb megy körbe. A játékot az óramutató járásával megyegyező irányban játszák.
+
+Amint be van rakva a kisvak és a nagy vak, kezdődhet a játék. Az osztó a kis vaknak oszt előszőr egy lapot, majd körbe mindenkinek, ezután megint egy lapot mindenkinek. A beszédet a nagy vak mellett ülő játékos kezdheti, vagyis ő nyilatkozhat először lapjairól. Alapvetően három választási lehetősége van, ahogy mindenkinek az asztalnál. Bedobja lapjait, beszáll, vagyis megadja az alaptétet, vagy pedig emel. Miután mindenki beszélt az asztalnál (utoljára a nagy vak), akkor az osztó egy lapot éget, vagyis letesz az asztalra fejjel lefelé, ami már nincs játékban. Ez után három lapot kirak egymás után, hogy mindenki lássa. Itt jön a második licitkör. Ebben az esetben már a kis vak kezdi a beszélést. Ugyan az a három lehetősége van, majd ha mindenki beszélt (az osztó utoljára), akkor még egy lap égetése, majd immáron csak egy lap asztalra helyezése következik. Megint jön egy licitkör, majd még egy égetés, és az utolsó felfordított lap az asztalra. Maradt még egy utolsó licitkör, és elérkeztünk a játék végéhez.
+
+Abban az esetben nyer valaki, ha a bentmaradt játékosok közül neki van a legerősebb lapja, vagy ha nem maradt más játékban csak egy valaki. A lent lévő 5 lapból és a kezünkben lévő 2-ből, összesen 5-öt választhatunk ki, így alakul ki a kezünk. Ezzel lement egy parti a játékból. Valakinek gyarapodott a zsetonkészlete, valakinek csökkent.
+
+\subsection{Alapfogalmak}
+Elengedhetetlen, hogy tisztázzunk néhány alapfogalmat. Ezek a következők.
+\begin{itemize}
+\item Flop: Három kártyalap, ami egyszerre kerül az asztalra, színével fölfelé. Ezek a lapok a játékosok közös lapjai. A flop után egy újabb licitkör következik.
+\item Gomb vagy osztó (Button): A kis vak jobb oldalán ülő játékos. A flop után ő kerül utoljára sorra minden licitkörben. A gombot egy fehér korong jelzi, ami az óramutató járásával megegyező irányban körbejár az asztalon.
+\item Jó (Out): Olyan lap(ok), mellyek kezünk nyerővé alakulna.
+\item Kezdeti bank (Initial pot): A vaktét és az esetleges alaptétek összege a licitálás megkezdése előtt.
+\item Kis vaktét (Small blind): Az osztó bal oldalán ölő játékos által a licitsorozat megkezdéseként kötelezően betett tét.
+\item Nagy vaktét (Big blins): A kis vak bal oldalán ölő játékos által kötelezően betett tét, a további akciók motiválására.
+\item Turn: A negyedik közös lap, ami színével fölfelé az asztal közepére kerül. A turn után újabb licitkör következik.
+\item River: Az ötödik és egyben utolsó közös lap, ami az asztal közepére kerül színével fölfelé. A river után az utolsó licitkör következik.
+\item Saját lapok (Hole cards): Az egyes játékosoknak a parti elején színével lefelé kiosztott két-két kártyalap. Ezeket a lapokat a többi játékos nem láthatja.
+\item Kéz: Egy játékos által, a lent lévő és a kezében lévő lapok közül kiválasztott öt lap.
+\item Nuts: A lehető legjobb kombinációval rendelkező játékos keze.
+\item Zsetonkészlet (Stack): Egy adott játékos előtt az asztalon lévő zsetonmennyiség.
+\end{itemize}
+
+\subsection{Piackutatás}
+Mielőtt belekezdtem volna az alkalmazás elkészítésébe, végeztem egy kis piackutatást, milyen platformok/programok vannak, amik a témával foglalkoznak.
+
+Nem kellett messzire mennem, hogy az elsőre rábukkanjak, hiszem a póker közvetítéseken láthatjuk, hogy ki van írva a játékosok nyerési esélye, egy-egy leosztásnál. Ott viszont a program ismeri a játékban lévő játékosok lapjait, valamint az asztalon lévő lapokat. Így könnyebb meghatározni melyik játékos nyer, vagy legalábbis kevesebb számítást igényel. Esetemben az alkalmazás csak a saját lapomat, valamint az asztalon lévőket ismeri.
+
+A másik dolog??, amit találtam a témával kapcsolatban, az egy technika, amivel a profi póker játékosok az esélyeiket számolják. A lényege csupán annyi, hogy kiszámolják a lehetséges out-okat, amivel javul a kezük, ezeket megszorozzák kettővel, majd annyival, ahány lapra még várunk. Flop esetén kettővel, turn esetén egyel. Így kapnak egy számot, ami ha nagyobb, mint a banki esélyük, akkor matematikailag, vagy éppen gazdaságilag kifizetődő tartani a tétet. Ezzel a megoldással szemben az én elképzelésem alapján nem csak egy közelítő értéket fogunk kapni, hanem specifikusan minden lehetséges leosztásra egy pontos értéket kapunk, emellett még más adatokat is, melyek segítenek eldönteni a felhasználónak mi legyen a következő lépés.
+
+\Section{Felhasznált technológiák}
+Ebben a szakaszban bemutatom az összes olyan technológiát, programozási nyelvet, keretrendszert vagy könyvtárat, amit felhasználtan a szakdolgozatom elkészítése során. Törekszem a tömör magyarázatra. Mindegyiknél próbálom elmagyarázni miért választottam, valamint mik az előnyei, amik számomra kedvezőek voltak.
+
+\subsection{Egyoldalas webalkalmazások}
 
 Ha figyelemmel követjük a Javascript keretrendszerek fejlődését, akkor láthatjuk, hogy egyre nagyobb teret kapnak az egyoldalas alkalmazások (Single Page Application), az olyan többoldalas alkalmazásokkal (Multi Page Application) szemben, mint a jQuery vagy a Laravel.
 
 Három elterjedt Javascript keretrendszert különböztetünk meg. A Facebook által fejlesztett React-ot, az Angulart, amit a Google hozott létre és az Evan You alkotott Vue JS-t.
 
-\Section{Vue JS bemutatása}
+\subsection{Vue JS}
 
 Mindhárom SPA-nak megvan a maga előnye és hátránya. Ezek közül inkább csak a Vue előnyeire koncentrálok a másik kettővel szemben. A három közül ez a legkönnyebben tanulható. Használatához nem szükséges különösebb meglévő Javascript tudás, enélkül is könnyen el lehet sajátítani.
 
@@ -16,9 +53,9 @@ Többek között a Vue JS egyik fő tulajdonsága - ami megvan a többi SPA-ban 
 
 Ezek miatt esett a választásom a Vue JS-re, amire több forrás keretrendszerként, mások pedig könyvtárként hivatkoznak.
 
-\Section{Node JS és az Express}
+\subsection{Node JS és az Express}
 
-Amellett, hogy a legnépszerűbb programozási nyelv, a Javascript az egyik leginkább univerzális szoftverfejlesztési technológia. Hagyományosan frontend fejlesztésre használták, viszont az utóbbi időben elterjedt a szerver oldali (backend) használata is.Az egyik eszköz - és talán a legismertebb - ami ezt az elmozdulást elősegítette az a Node JS.
+Amellett, hogy a legnépszerűbb programozási nyelv, a Javascript az egyik leginkább univerzális szoftverfejlesztési technológia. Hagyományosan frontend fejlesztésre használták, viszont az utóbbi időben elterjedt a szerver oldali (backend) használata is. Az egyik eszköz - és talán a legismertebb - ami ezt az elmozdulást elősegítette az a Node JS.
 
 A Node JS tulajdonképpen nem egy keretrendszer, nem is egy könyvtár, hanem egy futtató környezet, ami a Chrome V8-as motorján alapszik. A technológiát először 2009-ben mutata be Ryan Dahl az Európai Javascript Konferencián. Amellett, hogy ezen a konferencián rögtön elnyerte a legizgalmasabb szoftver díjat, nem volt használatos széles körben. A technológia 2017-ben csúcsosodott ki, amikor is először használta egy ismertebb cég, a LinkedIn, vagy, hogy még egy párat említsek, a Netflix, eBay és az Uber.
 
@@ -26,4 +63,35 @@ Az egyik hatalmas előnye a Node JS használatának, hogy autómatikusan teljesk
 
 Ezek mellett gyors feldolgozású, mivel közös nyelvet használ a frontend és a backend, így a szinkronizáció gyors. Esemény alapú modell-t (event-based model) használ, ezért népszerű választás online játékok, vagy videó konferenciák készítéséhez. Gazdag az ökoszisztémája, az npm - ami a Node JS alapértelmezett csomagkezelője - paranccsal több, mint 800 ezer könyvtárat érhetünk el. Ezen felül több, számos előnye is van, amikre nem térek ki.
 
-Express kifejtése.
+Az Express a legnépszerőbb Node JS keretrendszer. Köztes szoftverként (middleware) hivatkoznak rá, amely annyit tesz, hogy tulajdonképpen a kliens és a szerver oldal közötti híd felépítéséhez biztosít eszközöket. Könnyű, rugalmas és véleménymentes keretrendszer. Véleménymentes, mert semmilyen módon nem korlátozza a fejlesztőt, így nagy szabadságot ad. Emellett nagy teljesítményű és hatalmas közössége van a sok felhasználó miatt.
+
+\subsection{HTML}
+A HTML-ről (Hypertext Markup Language) nem szeretnék hosszasan írni. Talán egy laikus is tudja, hogy ha webalkalmazásról van szó, vagy akár csak egy honlapról, akkor megkerülhetetlen a HTML.
+
+A HTML-t weboldalak készítésére hozták létre, amit később bárki elérhet, aki rendelkezik internet kapcsolattal (feltéve, hogy fel van töltve a weboldal egy domain-re). Használhatunk benne főcímeket, paragrafusokat, beépített képeket, videókat. Ezeket úgynevezett tag-ek határoznak meg. Az elején a kezdő tag, a végén pedig a záró tag.
+
+Szakdolgozatomban a HTML5-öt használtam, amit 2014-ben mutattak be. Többek között olyan újításokat tartalmazott, mint a beépített audio és video tartalom.
+
+\subsection{CSS}
+
+A CSS (Cascading Style Sheets) egy stílusleíró nyelv. Alkalmazása a HTML elemek kinézetére irányul, azaz hogyan szeretnénk láttatni a weboldalunkon megjelenő tartalmakat.
+
+A CSS a HTML elemekre hat, a kommunikálás pedig többek között a selector-ok segítségével történik. Ezeket a CSS alapból tartalmazza, hivatkozhatunk egy megformálni kívánt paragrafusra, főcímre, valamint megadhatunk saját osztályokat is, amiket többször fel tudunk használni. A deklaráció tulajdonságokat és értékeket tartalmaz.
+
+Itt szeretnék megemlíteni két dolgot, amit a szakdolgozatom készítése során tapasztaltam. Az egyik, hogy érdekes volt számomra megfigyelni, hogy leginkább ez a rész volt az, ami felkeltette az érdeklődésem, ebben tudtam maximálisan kiteljesedni. A másik pedig, hogy megjegyezném az egyre elterjedtebb felhasználási módját a CSS-nek. Ez pedig nem más, mint a Bootstrap, amit azért hoztak létre, hogy könnyedén készítsünk reszponzív weboldalakat, azaz minden képernyőméreten szépen megjelenő oldalakat.
+
+Esetemben tudtam, hogy az én alkalmazásomat számítógép képernyőjén, esetleg más eszközökön, de kizárólag fektetett állapotban lehet használni. Éppen ezért nem láttam értelmét mélyebben beleásni magam ebbe a világba.
+
+\subsection{Google Firebase}
+A Firebase egy szoftverfejlesztő platform, ami 2011-ben indult és 2014-ben került a Google tulajdonába. Valósidejű adatbázisként (Realtime Database) indult, mostanra viszont 18 szolgáltatása és dedikált API-ja (Application Programming Interface) van. Az egész platform egy úgynevezett Backend-as-a-Service megoldást kínál mobil és webalapú alkalmazásokhoz, amely szolgáltatást tartalmaz az alkalmazások fejlesztésére, tesztelésére és kezelésére. 
+
+Számomra a legfőbb előnyei a technológiának, amiért ezt választottam a következők. Teljesen ingyenesen lehet használni a legtöbb szolgáltatását. Könnyű hozzáférést biztosít az adatokhoz, a Firbease console-on keresztül. Könnyő az integrálása is és minimális programozási ismereteket kíván, tehát majdnem, hogy bárki be tudja építeni az alkalmazásába.
+
+Annak ellenére, hogy ez egy nagyon összetett paltform, az alkalmazásom kizárólag a Real Time Database-t használja ezekből. A Google Firebase végzi az autencikációt, vagyis a regisztrációt és a bejelentkezést az oldalra.
+
+\subsection{JSON}
+A JSON (Javascript Object Notation) egy szövegalapú nyílt szabvány, amit emberek számára is könnyen olvasható adatátvitelre terveztek. Javascript alapú alkalmazásokhoz, valamint hálózati kapcsolaton keresztüli továbbításra használják. 
+
+Egyik és talán legfontosabb előnye, hogy a legtöbb script nyelvben közvetlenül megfelel az alapvető adattípusoknak, továbbá különbséget tesz a string, number és boolean értékek között. Tehát könnyedén lehet használni a webfejlesztés során. 
+
+Objektumokat hozhatunk benne létre, melyekre kulcsokkal tudunk hivatkozni. Számomra ez volt a fő szempont, mert nagy adathalmazzal kell dolgoznom és ezekben keresést végezni, ami ezzel a módszerrel gyorsnak tekinthető.
