@@ -10,8 +10,17 @@ Amint be van rakva a kisvak és a nagy vak, kezdődhet a játék. Az osztó a ki
 
 Abban az esetben nyer valaki, ha a bentmaradt játékosok közül neki van a legerősebb lapja, vagy ha nem maradt más játékban csak egy valaki. A lent lévő 5 lapból és a kezünkben lévő 2-ből, összesen 5-öt választhatunk ki, így alakul ki a kezünk. Ezzel lement egy parti a játékból. Valakinek gyarapodott a zsetonkészlete, valakinek csökkent.
 
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.4]{images/process-flow.png}
+\caption{Folyamatábra a póker menetéről}
+\cite{process-flow}
+\label{fig:process-flow}
+\end{figure}
+
 \subsection{Alapfogalmak}
 Elengedhetetlen, hogy tisztázzunk néhány alapfogalmat. Ezek a következők.
+\cite{harrington}
 \begin{itemize}
 \item Flop: Három kártyalap, ami egyszerre kerül az asztalra, színével fölfelé. Ezek a lapok a játékosok közös lapjai. A flop után egy újabb licitkör következik.
 \item Gomb vagy osztó (Button): A kis vak jobb oldalán ülő játékos. A flop után ő kerül utoljára sorra minden licitkörben. A gombot egy fehér korong jelzi, ami az óramutató járásával megegyező irányban körbejár az asztalon.
@@ -35,8 +44,24 @@ Nem kellett messzire mennem, hogy az elsőre rábukkanjak, hiszem a póker közv
 Létezik egy technika a témával kapcsolatban, amivel a profi póker játékosok az esélyeiket számolják. A lényege csupán annyi, hogy kiszámolják a lehetséges out-okat, amivel javul a kezük, ezeket megszorozzák kettővel, majd annyival, ahány lapra még várunk. Flop esetén kettővel, turn esetén egyel. Így kapnak egy számot, ami ha nagyobb, mint a banki esélyük, akkor matematikailag, vagy éppen gazdaságilag kifizetődő tartani a tétet. Ezzel a megoldással szemben az én elképzelésem alapján nem csak egy közelítő értéket fogunk kapni, hanem specifikusan minden lehetséges leosztásra egy pontos értéket kapunk, emellett még más adatokat is, melyek segítenek eldönteni a felhasználónak mi legyen a következő lépés.
 
 Az interneten két hasonló programot találtam a póker esélyek számítására, mindkettő webalkalmazás és külalakra hasonlítanak az én elképzelésemre. Az elsőnél csak úgy lehet használni az alkalmazást, ha legalább két játékosnak megadjuk a lapjait. Ezzel a probléma ugyan csak az, mint a fent említett televíziós közvetítéseknél ismert megoldással. Ezt az alkalmazást a chardchat.com weboldalon találtam, ami a világ elsőszámú pókeres online közössége.
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.6]{images/cardschat.png}
+\caption{Cardschat Poker Odds Calculator}
+\label{fig:cardschat}
+\end{figure}
 
 A másik szoftver, ami talán a legjobban megközelíti a megoldásomat, a pokernews.com oldalán lévő webalkalmazás. Érdekesség, hogy ezt szintúgy egy óriás, pókerrel foglalkozó cég szponzorálta. A világ talán leghíresebb online póker platformja, a legnagyobb póker versenyek rendezője, a PokerStars. Ebben az esetben tudunk esélyeket számolni úgy is, hogy csak egy játékost választunk ki, csak úgy, mint az én megoldásomnál. Le tudunk rakni 1 és 9 között tetszőleges számú játékosokat, az alkalmazás pedig ezt figyelembe véve számolja az esélyeket. Ezen felül még további esélyeket is látunk, hogy hány százalék a valószínűsége annak, hogy párunk, drillünk, pókerünk, stb. alakuljon ki. Ez a megoldás nagy részben lefedi az általám kigondolt megvalósítást. A különbség, hogy én csak azt szeretném látni, hogy mennyi az esélyem a nyerésre. Az, hogy különböző kezek milyen esélyben alakulnak ki, számomra lényegtelen. Ezzel szemben olyan matematikai mutatók, mint az átlag, a medián vagy a relatív gyakoriság sokkal fontosabb tudni, hogy segítsen a felhasználónak bemutatni az esélyeit.
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.5]{images/pokerstars.png}
+\caption{Pokerstars Texas Hold'Em Poker Odds Calculator}
+\label{fig:pokerstars}
+\end{figure}
+
+\cite{cardschat}
+\cite{pokerstars}
+\cite{harrington}
 
 \Section{Felhasznált technológiák}
 Ebben a szakaszban bemutatom az összes olyan technológiát, programozási nyelvet, keretrendszert vagy könyvtárat, amit felhasználtan a szakdolgozatom elkészítése során. Törekszem a tömör magyarázatra. Mindegyiknél próbálom elmagyarázni miért választottam, valamint mik az előnyei, amik számomra kedvezőek voltak.
@@ -46,6 +71,7 @@ Ebben a szakaszban bemutatom az összes olyan technológiát, programozási nyel
 Ha figyelemmel követjük a Javascript keretrendszerek fejlődését, akkor láthatjuk, hogy egyre nagyobb teret kapnak az egyoldalas alkalmazások (Single Page Application), az olyan többoldalas alkalmazásokkal (Multi Page Application) szemben, mint a jQuery vagy a Laravel.
 
 Három elterjedt Javascript keretrendszert különböztetünk meg. A Facebook által fejlesztett React-ot, az Angulart, amit a Google hozott létre és az Evan You alkotott Vue JS-t.
+\cite{vue}
 
 \subsection{Vue JS}
 
@@ -56,6 +82,7 @@ A maga 18 KB-os méretével rendkívül kicsinek számít, amit könnyű letölt
 Többek között a Vue JS egyik fő tulajdonsága - ami megvan a többi SPA-ban is - hogy komponensekből épül fel, amiket újra felhasználhatunk, ezzel is elősegíti a rövidebb programkódot, átláthatóságot, egyszerűséget, amiket már fent említettem.
 
 Ezek miatt esett a választásom a Vue JS-re, amire több forrás keretrendszerként, mások pedig könyvtárként hivatkoznak.
+\cite{vue}
 
 \subsection{Node JS és az Express}
 
@@ -68,6 +95,13 @@ Az egyik hatalmas előnye a Node JS használatának, hogy autómatikusan teljesk
 Ezek mellett gyors feldolgozású, mivel közös nyelvet használ a frontend és a backend, így a szinkronizáció gyors. Esemény alapú modell-t (event-based model) használ, ezért népszerű választás online játékok, vagy videó konferenciák készítéséhez. Gazdag az ökoszisztémája, az npm - ami a Node JS alapértelmezett csomagkezelője - paranccsal több, mint 800 ezer könyvtárat érhetünk el. Ezen felül több, számos előnye is van, amikre nem térek ki.
 
 Az Express a legnépszerőbb Node JS keretrendszer. Köztes szoftverként (middleware) hivatkoznak rá, amely annyit tesz, hogy tulajdonképpen a kliens és a szerver oldal közötti híd felépítéséhez biztosít eszközöket. Könnyű, rugalmas és véleménymentes keretrendszer. Véleménymentes, mert semmilyen módon nem korlátozza a fejlesztőt, így nagy szabadságot ad. Emellett nagy teljesítményű és hatalmas közössége van a sok felhasználó miatt.
+\cite{node}
+
+\subsection{Chart JS}
+A Chart JS egy nyílt forráskódú javascript könyvtár adatok megjelenítésére, amely nyolc féle diagramm típust támogat. 2013-ban fejlesztették, mára a második legnépszerűbb diagram készítő javascript könyvtár a GitHub-on. Meglepően egyszerű használni, ez volt a fő oka, amiért ezt választottam. 
+
+A Chart JS HTML5-be renderel. Az én célomhoz csupán két féle diagram típust kell használnom. Az oszlopdiagramot és a vonaldiagramot, ezeket kell egybefűznöm és úgy megjelenítenem.
+\cite{chartjs}
 
 \subsection{HTML}
 A HTML-ről (Hypertext Markup Language) nem szeretnék hosszasan írni. Talán egy laikus is tudja, hogy ha webalkalmazásról van szó, vagy akár csak egy honlapról, akkor megkerülhetetlen a HTML.
@@ -75,6 +109,7 @@ A HTML-ről (Hypertext Markup Language) nem szeretnék hosszasan írni. Talán e
 A HTML-t weboldalak készítésére hozták létre, amit később bárki elérhet, aki rendelkezik internet kapcsolattal (feltéve, hogy fel van töltve a weboldal egy domain-re). Használhatunk benne főcímeket, paragrafusokat, beépített képeket, videókat. Ezeket úgynevezett tag-ek határoznak meg. Az elején a kezdő tag, a végén pedig a záró tag.
 
 Szakdolgozatomban a HTML5-öt használtam, amit 2014-ben mutattak be. Többek között olyan újításokat tartalmazott, mint a beépített audio és video tartalom.
+\cite{web}
 
 \subsection{CSS}
 
@@ -85,6 +120,7 @@ A CSS a HTML elemekre hat, a kommunikálás pedig többek között a selector-ok
 Itt szeretnék megemlíteni két dolgot, amit a szakdolgozatom készítése során tapasztaltam. Az egyik, hogy érdekes volt számomra megfigyelni, hogy leginkább ez a rész volt az, ami felkeltette az érdeklődésem, ebben tudtam maximálisan kiteljesedni. A másik pedig, hogy megjegyezném az egyre elterjedtebb felhasználási módját a CSS-nek. Ez pedig nem más, mint a Bootstrap, amit azért hoztak létre, hogy könnyedén készítsünk reszponzív weboldalakat, azaz minden képernyőméreten szépen megjelenő oldalakat.
 
 Esetemben tudtam, hogy az én alkalmazásomat számítógép képernyőjén, esetleg más eszközökön, de kizárólag fektetett állapotban lehet használni. Éppen ezért nem láttam értelmét mélyebben beleásni magam ebbe a világba.
+\cite{web}
 
 \subsection{Google Firebase}
 A Firebase egy szoftverfejlesztő platform, ami 2011-ben indult és 2014-ben került a Google tulajdonába. Valósidejű adatbázisként (Realtime Database) indult, mostanra viszont 18 szolgáltatása és dedikált API-ja (Application Programming Interface) van. Az egész platform egy úgynevezett Backend-as-a-Service megoldást kínál mobil és webalapú alkalmazásokhoz, amely szolgáltatást tartalmaz az alkalmazások fejlesztésére, tesztelésére és kezelésére. 
@@ -92,6 +128,7 @@ A Firebase egy szoftverfejlesztő platform, ami 2011-ben indult és 2014-ben ker
 Számomra a legfőbb előnyei a technológiának, amiért ezt választottam a következők. Teljesen ingyenesen lehet használni a legtöbb szolgáltatását. Könnyű hozzáférést biztosít az adatokhoz, a Firbease console-on keresztül. Könnyő az integrálása is és minimális programozási ismereteket kíván, tehát majdnem, hogy bárki be tudja építeni az alkalmazásába.
 
 Annak ellenére, hogy ez egy nagyon összetett paltform, az alkalmazásom kizárólag a Real Time Database-t használja ezekből. A Google Firebase végzi az autencikációt, vagyis a regisztrációt és a bejelentkezést az oldalra.
+\cite{firebase}
 
 \subsection{JSON}
 A JSON (Javascript Object Notation) egy szövegalapú nyílt szabvány, amit emberek számára is könnyen olvasható adatátvitelre terveztek. Javascript alapú alkalmazásokhoz, valamint hálózati kapcsolaton keresztüli továbbításra használják. 
