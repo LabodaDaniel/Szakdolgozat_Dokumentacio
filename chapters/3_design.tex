@@ -1,2 +1,61 @@
 \Chapter{Technikai kivitelezés}
+Ebben a fejezeetben bemutatom az elkészült programot a számomra legérdekesebb programrészletekkel. Nem térek ki minden funkcióra és programkódra, csak a lényegesebb egységekre. Részletezem a front end kivitelezését, amelybe tartozik a Vue JS, HTML és CSS kódok. Ezután a back end számításokat mutatom be, amelyet Node JS környezetben valósítottam meg.
 
+\section{Front end kivitelezése}
+Egy webalkalmazás front end része az, amit a felhasználó érzékel az oldalról. Itt részletesen bemutatom a főbb egységeket, melyek Vue JS-ben íródtak. A HTML és CSS részekre csak minimálisan térek ki, itt pedig igyekszem azokat a megoldásokat bemutatni, melyek a legizgalmasabbak voltak a kivitelezés során. 
+
+\subsection{Autentikáció}
+Az alkalmazás első oldala a bejelentkező/regisztrációs felület. A két oldal kissebb eltérések mellett ugyan az, ezért nem térek ki külön csak a változásokra. A register oldalon meg kell adnunk egy e-mail címet, egy hozzá tartozó jelszót, valamint egy becenevet is. Ha regisztráltunk, akkor a login oldalon csak megadjuk az e-mail címünket és a hozzá tartozó jelszót, a sign in gombra kattintunk és már be is enged minket az oldal. A bejelentkezést és a regisztrációt a Firebase végzi, valamint a validációt is. Az e-mail címnek tartalmaznia kell egy kukac jelet, illetve pontot és egy domain-t. A jelszónak legalább hat karakter hosszúnak kell lennie.
+
+Ennek a két oldalnak a HTML része nagyon egyszerű. Egy formot belül két szöveges beviteli mezőt, ezen kívül egy gombot találunk. Mindezt közbezárja egy div, ami tartalmaz még két címet is, melyek a login és a sign up feliratok, ezekkel tudunk váltani a két oldal között. A login rész még kiegészül egy harmadik beviteli mezővel, ami a becenév.
+
+\begin{html5}
+<div class="login">
+  <h2 class="active"> Login </h2>
+  <h2 class="nonactive"><router-link to="/register"> Sign up </router-link></h2> 
+  <form @submit.prevent="Login">
+    <input type="text" class="text" name="E-mail" v-model="email">
+    <span>E-mail</span>
+    <input type="password" class="text" name="password" v-model="password">
+    <span>password</span>
+    <button class="signin" value="Login">
+      Sign In
+    </button>
+  </form>
+</div>
+\end{html5}
+
+Az autentikációt viszonylag egyszerű elvégezni a Firebase segítségével. Regisztrációnál a createUserWithEmailAndPassword függvényt használjuk, amivel létrehozunk egy felhasználót. Ehhez egy e-mail cím és egy jelszó tartozik, jelen esetben kieégüszlve egy becenévvel. Ezt el is tárolja nekünk a Firesotre Database-ben.Ezután bejelentkezésnél a signInWithEmailAndPassword függvényt használjuk, amely megkapja az e-mail és jelszó párost, és ha ez egyezik, már bent is vagyunk a főoldalon.
+
+\begin{javascript}
+const Register = () => {
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(email.value, password.value)
+        .then((user) => {
+          db.collection("users")
+            .doc(user.uid)
+            .set({nickname: nickname.value})
+        })
+        .catch((err) => alert(err.message));
+    };
+\end{javascript}
+
+Az autentikációs oldalak stílusa talán a leglátványosabb az alkalmazásban. Igyekeztem egységesen megformázni az összes oldalt. Ahol lehet lekerekítést használok, és mindenhol a azonos kék és piros színekkel kombinálok. A CSS legérdekesebb része számomra ebben a részben a két címsor formázása volt. A felhasználónak ez csupán színek váltakozása, viszont annál sokkal érdekesebb. Mikor melyik cím aktív, úgy annak a színe változik fehérré és kap egy aláhúzást, a másik címsor pedig elhalványodik. Ezt a login és a register oldal váltásával jelenítem meg.
+
+\begin{css}
+.active {
+  border-bottom: 2px solid #1161ed;
+}
+.nonactive {
+  color: rgba(255, 255, 255, 0.2);
+}
+\end{css}
+
+\subsection{Főoldal és navigációs fejléc}
+A főoldalról nem szeretnék hosszasan írni, mert tartalmilag is elég rövid. Mindössze két block elemben két paragrafus található benne, formázva. Az egyik röviden leírja a póker játék lényegét, a másik pedig megfogalmazza, miről is szól az alkalmazás.
+
+A navigációs fejléc az egyik komponensünk. Ezt mindegyik oldalon felhasználóm, hiszen a felhasználó így tud váltani az oldalak között.
+
+\section{Back end kivitelezése}
+A back end rész megvalósítása véleményem szerint a legkiemelkedőbb eleme a szakdolgozatomnak. Itt Node JS programkódok fognak szerepelni a hozzájuk tartozó magyarázattal, valamint bemutatom az adathalmazomat is.
