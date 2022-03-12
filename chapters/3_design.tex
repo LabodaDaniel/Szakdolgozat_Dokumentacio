@@ -9,7 +9,7 @@ Az alkalmazás első oldala a bejelentkező/regisztrációs felület. A két old
 
 Ennek a két oldalnak a HTML része nagyon egyszerű. Egy formot belül két szöveges beviteli mezőt, ezen kívül egy gombot találunk. Mindezt közbezárja egy div, ami tartalmaz még két címet is, melyek a login és a sign up feliratok, ezekkel tudunk váltani a két oldal között. A login rész még kiegészül egy harmadik beviteli mezővel, ami a becenév.
 
-\begin{html5}
+\begin{python}
 <div class="login">
   <h2 class="active"> Login </h2>
   <h2 class="nonactive"><router-link to="/register"> Sign up </router-link></h2> 
@@ -23,11 +23,11 @@ Ennek a két oldalnak a HTML része nagyon egyszerű. Egy formot belül két sz�
     </button>
   </form>
 </div>
-\end{html5}
+\end{python}
 
 Az autentikációt viszonylag egyszerű elvégezni a Firebase segítségével. Regisztrációnál a createUserWithEmailAndPassword függvényt használjuk, amivel létrehozunk egy felhasználót. Ehhez egy e-mail cím és egy jelszó tartozik, jelen esetben kieégüszlve egy becenévvel. Ezt el is tárolja nekünk a Firesotre Database-ben.Ezután bejelentkezésnél a signInWithEmailAndPassword függvényt használjuk, amely megkapja az e-mail és jelszó párost, és ha ez egyezik, már bent is vagyunk a főoldalon.
 
-\begin{javascript}
+\begin{python}
 const Register = () => {
       firebase
         .auth()
@@ -39,23 +39,121 @@ const Register = () => {
         })
         .catch((err) => alert(err.message));
     };
-\end{javascript}
+\end{python}
 
 Az autentikációs oldalak stílusa talán a leglátványosabb az alkalmazásban. Igyekeztem egységesen megformázni az összes oldalt. Ahol lehet lekerekítést használok, és mindenhol a azonos kék és piros színekkel kombinálok. A CSS legérdekesebb része számomra ebben a részben a két címsor formázása volt. A felhasználónak ez csupán színek váltakozása, viszont annál sokkal érdekesebb. Mikor melyik cím aktív, úgy annak a színe változik fehérré és kap egy aláhúzást, a másik címsor pedig elhalványodik. Ezt a login és a register oldal váltásával jelenítem meg.
 
-\begin{css}
+\begin{python}
 .active {
   border-bottom: 2px solid #1161ed;
 }
 .nonactive {
   color: rgba(255, 255, 255, 0.2);
 }
-\end{css}
+\end{python}
 
 \subsection{Főoldal és navigációs fejléc}
 A főoldalról nem szeretnék hosszasan írni, mert tartalmilag is elég rövid. Mindössze két block elemben két paragrafus található benne, formázva. Az egyik röviden leírja a póker játék lényegét, a másik pedig megfogalmazza, miről is szól az alkalmazás.
 
-A navigációs fejléc az egyik komponensünk. Ezt mindegyik oldalon felhasználóm, hiszen a felhasználó így tud váltani az oldalak között.
+A Vue JS egyik előnye, hogy komponensekből épül fel, melyeket többször fel tudunk használni. Nekem az egyik ilyen komponensem a navigációs fejléc. Ezt mindegyik oldalon felhasználom, hiszen a felhasználó ezen keresztül tud váltani az oldalak között. Másik sajátossága a view-router, ami megvalósítja az oldalak közötti ugrást, ezek az index.js file-ban vannak definiálva.
+
+\begin{python}
+<nav class="navbar">
+  <ul>
+    <li class="stand"><router-link to="/" class="must">Home</router-link></li>
+    <li class="stand"><router-link to="/simulategame" class="must">Simulate Game</router-link></li>
+    <li @click="Logout" class="log"><router-link to="/login" class="must">Logout</router-link></li>
+  </ul>
+</nav>
+</template>
+\end{python}
+
+A Vue-nak köszönhetően ebben a komponensben nincs szükség javascriptre, anélkül tudunk váltani az oldalak között. Természetesen ezt is formázom CSS-el.
+
+\subsection{Játék szimuláció}
+Az alkalmazás nagy része front end részről a SimulateGame.vue oldalon van. Itt találjuk magát a játékot. Az oldalra érkezéskor a közepém egy pókerasztalt látunk, alatta pedig a 4 színt. Ezek közül egyre rákattintunk, akkor felugrik abból a színből mind a 13 lap, itt tudunk kiválasztani egyet. Ha ez megtörtént, akkor az a lap eltűnik a választási lehetőségek közül, többször már nem választhatjuk, valamint hozzáadja egy tömbhöz, majd ugyan ezt megismételjük 6-szor. Az összes lapot előre definiáltam. A lapokra való kattintáskor meghívódik a chooseCard() függvény, amely a fentieket végzi el.
+
+\begin{python}
+    chooseCard(name, id, url) {
+      if (this.isThere === 8) {
+        this.cardsFull = true;
+        return;
+      }
+      this.sevenCards.push({ name, url });
+      this.isThere = this.isThere + 1;
+      this.showPic = false;
+      this.isHidden = false;
+      this.cards[id - 1] = false;
+    }
+\end{python}
+
+A függvény elején rögtön egy feltétel van, ami ellenőrzi, hogy ne rakhassunk le 7 lapnál többet az asztalra. Amennyiben így szeretnénk tenni, egy pop up ablak ugrik fel, amely jelzi a felhasználónak, hogy több lapot már nem tehet le.
+
+Ezen kívül a kiválasztott lapot belerakjuk a sevenCards globális objektumba, melyet majd továbbadunk a back end-nek, hogy végezze el a számításokat. Továbbá tartalmaz pár egyéb külső változót is, melyek a színek és lapok megjelenítéséért felelnek.
+
+A másik lényeges rész ezen az oldalon az esélyeket megjelenítő diagram. Ez is egy külön komponens, viszont itt töltöm fel adatokkal. A back end-től megkapjuk az összes következő lapra számolt esélyt. Az ellenfélnek mindig 990-szer több esete lesz, hiszen nem ismerjük a lapjait. Emiatt a mi esélyeink első esetét össze kell hasonlítani az ellenfél eslő 990 esetével, ebből kapunk egy százalékos esélyt, amely majd az első oszlopunk lesz a diagrammon, és így tovább. 
+
+Ezek mellett még olyan matematikai értékeket is számolok, mint az átlag, a medián vagy a szórás, melyek közül szerintem az utóbbi a legérdekesebb.
+
+\begin{python}
+        calculateDeviation(arr) {
+      let mean =
+        arr.reduce((acc, curr) => {
+          return acc + curr;
+        }, 0) / arr.length;
+      arr = arr.map((k) => {
+        return (k - mean) ** 2;
+      });
+      let sum = arr.reduce((acc, curr) => acc + curr, 0);
+      return Math.sqrt(sum / arr.length);
+    }
+\end{python}
+
+A felhasználó továbbá meg tud adni egy értéket is, amelyre az alkalmazás kiszámolja a relatív gyakoriságot, így többlet információhoz juthat, hogy mennyi esetben van például 50\% felett az ellenfél nyerési esélye.
 
 \section{Back end kivitelezése}
 A back end rész megvalósítása véleményem szerint a legkiemelkedőbb eleme a szakdolgozatomnak. Itt Node JS programkódok fognak szerepelni a hozzájuk tartozó magyarázattal, valamint bemutatom az adathalmazomat is.
+
+\subsection{Adathalmaz bemutatása}
+Úgy gondolom, átláthatóbb a dokumentáció úgy, ha először az adathalmazomat mutatom be, ugyanis erre többször fogok hivatkozni a későbbiekben. 
+
+Mint azt az alapötlet szakaszban is említettem, először egy kb. 133 millió soros adathalmazzal kezdtem el a megvalósítást, melyben az összes lehetséges 7 lap kombinációja benne volt. Ezt pythonban magamnak generáltam le. A generáció futási ideje 7,5 óra volt, az adathalmaz mérete pedig 6 GB.
+
+\begin{python}
+from itertools import combinations
+
+cards = combinations(["2c", "3c", "4c", ... , "As"], 7)
+sevenCards = {}
+sevenCards["cards"] = []
+
+with open("data_new.json", "w") as outfile:
+    for c in cards:
+        c = list(c)
+        outfile.write(f"{c}, \n")
+\end{python}
+
+Hamar kiderült, hogy ez akkora adathalmaz, amivel nagyon nehezen tudtam volna a továbbiakban dolgozni. Rengeteg keresést kell végeznem ezen, ami nagyon sok időbe telne, ezért más megoldást kellett találnom.
+
+Az interneten találtam egy másik adathalmazt, amely lényegesen kisebb volt, 7462 soros, ezt használtam fel. 
+\cite{chances}
+Ez a lehetséges 5 lap kombinációinak száma úgy, hogy nem vizsgálunk külön minden színt. Így a számításaim annyival bővültek, hogy a kiválasztott 7 lapból \[ \binom{7}{5}=21\] keresést kell végeznem, hogy megtaláljam a legerősebb 5 lapot, amit a felhasználó magától is ki tud választani, viszont az alkalmazásnak is tudnia kell, tehát ezzel kell majd tovább számolnia.
+
+Az adathalmazt JSON-ben tároltam el. Egyetlen objektumot tartalmaz, aminek az értéke a kombinációk, a kulcsa pedig a kéz erőssége. Azoknál az eseteknél, ahol számításba kell vennünk, hogy a lapok színe azonos, ott egy F betűt szúrtam az értékekbe. Ezeket abc sorrendbe rendeztem az egyszerűbb felhasználás végett.
+
+\begin{python}
+{
+  "cardStrenght": {
+    "AFJKQT": 1,
+    "9FJKQT": 2,
+    "89FJQT": 3,
+    "789FJT": 4,
+    "6789FT": 5,
+    .
+    .
+    .
+    "23457": 7462
+    }
+}
+\end{python}
+
+Az első 10 érték a színsorok, royal flush-el kezdve, a 11-dik az ász póker király kísérővel, a 7462-dik pedig a 7-es magaslap.
