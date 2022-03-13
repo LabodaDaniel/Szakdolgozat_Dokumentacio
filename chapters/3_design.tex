@@ -132,7 +132,7 @@ with open("data_new.json", "w") as outfile:
         outfile.write(f"{c}, \n")
 \end{python}
 
-Hamar kiderült, hogy ez akkora adathalmaz, amivel nagyon nehezen tudtam volna a továbbiakban dolgozni. Rengeteg keresést kell végeznem ezen, ami nagyon sok időbe telne, ezért más megoldást kellett találnom.
+Hamar kiderült, hogy ez akkora adathalmaz, amivel nagyon nehezen tudtam volna a továbbiakban dolgozni. Rengeteg keresést kell végeznem ebben, ami nagyon sok időbe telne, ezért más megoldást kellett találnom.
 
 Az interneten találtam egy másik adathalmazt, amely lényegesen kisebb volt, 7462 soros, ezt használtam fel. 
 \cite{chances}
@@ -157,3 +157,87 @@ Az adathalmazt JSON-ben tároltam el. Egyetlen objektumot tartalmaz, aminek az �
 \end{python}
 
 Az első 10 érték a színsorok, royal flush-el kezdve, a 11-dik az ász póker király kísérővel, a 7462-dik pedig a 7-es magaslap.
+
+A projekt vége felé közeledve, a preflop esélyek számolása az addig alkalmazott módszer szerint még mindig túl sok időt vett volna igénybe. Mivel két lap ismeretében nincs is annyi értelme több matematikai értéket szemléltetni, így arra jutottam, hogy csak egy százalékos esélyt fogok mutatni a többi lap ismerete nélkül. Ehhez létrehoztam egy hasonló adathalmazt, mint a kártyerősséget tartalmazó, ezt elneveztem PreflopData.json-nek. A tartalmát az alábbi táblázat adja. A párok alkotta átló fölött lévő kezdőlapok az egyszínűek esélye, alatta pedig a különböző színű lapoké.
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.5]{images/preflop-chances.png}
+\caption{Preflop kezek esélyei}
+\cite{preflop-chances}
+\label{fig:preflop-chances}
+\end{figure}
+
+\subsection{A felhasználó esélyeinek számítása}
+Az egyszerűbb része az esélyek számolásának a felhasználó esélyeinek a kiszámolása, ugyanis itt kevesebbet kell számolni. 
+
+A back end megkapja a front end-től a felhasználó által kiválasztott lapokat. Itt is definiálva van a pakli minden lapja, viszont objektum helyett csak egy tömbbe, mivel csak a lapok nevére van szükségünk. A default függvényben egy ellenőrzést végzek, hogy milyen hosszú az objektum, amit megkap. Erre azért van szükség, mert különböző számításokat kell végezni ha a flop-nál, turn-nél vagy river-nél szeretnénk megtudni esélyeinket. Először minden esetben a getOnlyName és a getJustDeck függvényeket használom. Az előbbivel az objektumot egy tömbre szűkítem, hogy csak a kártyák neveivel dolgozhassak tovább. Az utóbbival az összes lapot tartalmazó tömbből kitörlöm azokat, amelyeket a felhasználó már kiválasztott, így megkapom a pakliban maradt lapokat.
+
+River esetében a tömb hosszúsága 7. Itt van a legegyszerűbb dolgom, mivel minden lap ismert, csak vissza kell térni a felhasználó kezének értékével. Először legenerálom a 7 lapból az összes 5 lap kombinációját, ezt a createCombinations függvénnyel teszem. Ez megkap egy 7 elemű tömbböt és visszatér 21, 5 elemű tömbbel.A generációhoz a javascript generatorics nevű kombinatorikai könyvtárát használom.
+
+\begin{python}
+function createCombinations(sevenCards) {
+  let allCombinations = [];
+  for (let comb of G.combination(sevenCards, 5)) {
+    allCombinations.push(comb.slice());
+  }
+  return allCombinations;
+}
+\end{python}
+
+Ha megvan a 21, 5 elemű tömbbünk, akkor már csak meg kell keresni mindegyiknek az értékét az adathalmazban, majd kiválasztani a legkissebbet és azzal visszatérni. Ezt a createStorngest függvény valósítja meg, amely megkapja az előbb említett 5 lapos kombinciókat és visszatér a legerősebb 5 lap értékével.
+
+\begin{python}
+function createStrongest(combinations){
+  let rawdata = fs.readFileSync("data.json");
+  let strenghtOrder = JSON.parse(rawdata);
+  let result =  [];
+  for (let combination of combinations) {
+    let nameString = "";
+    let colors = { C: 0, S: 0, H: 0, D: 0 };
+    for (let card of combination) {
+      nameString += card[0];
+      colors[card[1]] += 1;
+    }
+    let ordered = sortCardOrder(nameString, colors);
+    result.push(strenghtOrder.cardStrenght[ordered]);
+  }
+  return Math.min(...result);
+}
+\end{python}
+
+A strengthOrder változóban eltárolom az adathalmazt. Egy foreach ciklussal végigmegyek mind a 21 kombináción. A cikluson belül ellenőrzöm, hogy a lapok között hány egyforma színű lap van, hiszen ha mind az 5 egyforma színű, akkor az olyan értékek közt is keresni kell, ahol számít a szín, tehát fulsh, esetleg színsorok. Itt a sortCardOrder függvény is szerepet játszik, itt rendezem abc sorrendbe a lapokat, illetve szúrok közé egy F betűt is, amennyiben figyelembe kell vennünk, hogy azonos színűek a lapok. A megkapott 21 lap értékével feltöltök egy tömböt, ezek után a függvény visszatér ennek a minimumával, ami a felhasználó lapjának az értéke lesz, ezt adom át a fornt end-nek.
+
+Turn-nél a kapott tömb hosszúsága 6, azaz még egy lapra várunk, amely nem ismert. Ebben az esetben ugyan azt kell tenni, mint a river esetében, egy kiegészítéssel. Mivel egy lapra még várunk, így végig kell menni egy ciklussal az összes pakliban maradt kártyán, melyekkel kiegészítem a kapott tömbböt, és elvégzem ugyan azokat a számításokat, amiket a rivern-nél is. Mivel 46 lap maradt a pakliban, így 46 értékkel tér vissza a függvény, ezeket adom át a front end-nek.
+
+Mikor három közös lap van az asztalon, azaz a flop, akkor egy 5 hosszúságú tömbböt kap a back end, tehát még két lapra várunk.  Hasonló a teendő, mint az előző esetben, csak kicsit másképp. Mivel most két lapra várunk, így két egymásba ágyazott ciklusra van szükség, majd mindkettőnek az aktuális elemét hozzá kell fűzni a kapott tömbbhöz, ezután meghívni ezekre a már ismert függvényeket, így megkapjuk az összes lehetséges lapra az esélyünket. A belső for ciklusnak mindig egyel a külső for ciklus léptető változója előtt kell járnia, mivel így elkerülhetem, hogy egy adott kombináció két féle képpen is előforduljon. Számunkra irreleváns, hogy a negyedik utcán érkezik egy treff király, az ötödiken pedig egy kör ász, vagy fordítva, a végeredmény ugyan az.
+
+Mikor csak a saját lapjainkat ismerjük, csupán annyit tesz az alkalmazás, hogy megkeresi a megadott két lapos kombinációt a PreflopData.json adathalmazban, és visszatér az értékével. Ez lesz a százalékos esélye a felhasználónak megnyerni a partit flop előtt. Ehhez a calcPreflopChance függvényt használja. Ebben szintén eltárolom egy változóba az adatokat, majd elvégzem a keresést benne. Ezen kívül annyi feladata van még, hogy ellenőrizze a két lap azonos színű-e. Ezt úgy teszi, hogy a lapok nevének a második karakterét, amely jelöli a színét, összehasonlítja. Amennyiben ezek egyenlőek, hozzáfűz egy F betűt, majd elvégzi a keresést az összefűzött string-el, valamint annak fordítottjával is. Erre azért van szükség, mert csak egy sorrendben szerepelnek a lapok a json dokumentumban, például az azonos színű ász-király AKf jelölésű, viszont ha mi először királyt kapunk, utána ászt, akkor a KAf jelölésre nem fog találni semmit.
+
+\begin{python}
+function calcPreflopChance(cards){
+  let rawdata = fs.readFileSync("PreflopData.json");
+  let chances = JSON.parse(rawdata);
+  let cardCheck;
+  let reversed;
+
+  if(cards[0][1] == cards[1][1]){
+    cardCheck = cards[0][0] + cards[1][0] + 'f';
+    reversed = cards[1][0] + cards[0][0] + 'f'
+  } else {
+    cardCheck = cards[0][0] + cards[1][0]
+    reversed = cards[1][0] + cards[0][0] 
+  }
+
+  if(chances['preflopStrenght'][cardCheck]){
+    return chances['preflopStrenght'][cardCheck]
+  } else {
+    return chances['preflopStrenght'][reversed]
+  }
+}
+\end{python}
+
+\subsection{Ellenfél esélyeinek számítása}
+findEnemyStorngest.js kifejtése
+
+\section{Kapcsolat a back end és a front end között}
