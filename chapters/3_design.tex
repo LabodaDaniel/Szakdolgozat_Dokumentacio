@@ -1,6 +1,48 @@
 \Chapter{Technikai kivitelezés}
 Ebben a fejezeetben bemutatom az elkészült programot a számomra legérdekesebb programrészletekkel. Nem térek ki minden funkcióra és programkódra, csak a lényegesebb egységekre. Részletezem a front end kivitelezését, amelybe tartozik a Vue JS, HTML és CSS kódok. Ezután a back end számításokat mutatom be, amelyet Node JS környezetben valósítottam meg.
 
+\section{A projekt felépítése}
+Mielőtt belekezdek a megoldásaim, függvények, programkódok magyarázásába, először bemutatom a projekt felépítését, hogy egyszerűbben érthető legyen. Először a webalkalmazás felépítését mutatom be. 
+
+A webalkalmazás frontend részét a már említett Vue JS-ben valósítottam meg. Ebben vannak a komponensek és a vue-router, amely az oldalak közti mozgást végzi el. A front end és a back end közötti kommunikációt az API végzi. A JSON adatbázis lokálisan helyezkedik el és csak a back end kommunikál vele, illetve használja a számításokhoz.
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.8]{images/web-arch.png}
+\caption{A webalkalmazás architektúrális ábrája}
+\label{fig:web-arch}
+\end{figure}
+
+A 3.2-es ábrán látható az elkészült projekt struktúrája file rendszer szinten. Az ábra bal oldalán a front end látható felépítése látható. A components mappában vannak a komponensek, amelyeket többször fel lehet használni az oldalakon. 
+
+A router mappában lévő index.js file-ban vannak definiálva a router-ek. Itt meg kell adni az elérési útvonalat, az oldal nevét, amelyre irányítani szeretnénk a felhasználót, illetve importálni az adott vue file-t. Ezeket az oldalakat a views mappában találjuk, itt az autentikációt végző oldalak, a home fül és a SimulateGame helyezkedik el, amelyben maga a póker alkalmazás valósul meg.
+
+Ezeken kívül a main.js-ben importálni kell minden olyan kiegészítőt, melyet használok az alkalmazásban, valamint a Firebase config része is itt van definiálva. Fontosak még az css file-ok, ezeket importálom be az egyes oldalakon, hogy a megfelelő megjelenést kölcsönözzem nekik. Ezeken kívül a package.json és package-lock.json file-okban meg vannak adva a felhasznált technológiák verziója, hogy ne legyen köztük ütközés.
+
+Az ábra jobb oldalán látható az alkalmazás back end része. Itt az erchitektúra jóval egyszerűbb. Két json adathalmazt hoztam létre, az egyik a kártyák erősségét tárolja, a másik a preflop esélyeket, mind a kettőbe egy-egy objektum helyezkedik el. Itt is megtalálható a package.json és a package-lock.json, ezek ugyan azt a szerepet töltik be, mint a front end-nél. Az index.js is hasonló mint a front end-en, itt is be kell importálni minden felhasznált technológiát, valamint megadni, hogy milyen porton fusson a back end. Erre azért van szükség, hogy a localhost-on futtatott kliens és szerver ne kavarodjon össze.
+
+A findStrongest.js-ben azok a kódok vannak, melyek a felhasználó esélyeit vizsgálja, a findEnemyStrongest.js-ben pedig azok, amik az ellenfél esélyeit. A helperFunctions.js arra szolgál, hogy a több helyen meghívott függvényeket eltárolja, így azokat nem kell többször megírni. Végül a root.js-ben két post response helyezkedik el, így történik az adatátvitel a kliens részére.
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.8]{images/frontend-backend-arch.png}
+\caption{A projekt struktúrája file rendszer szinten}
+\label{fig:frontend-backend-arch}
+\end{figure}
+
+Az osztály diagrammon bemutatom, hogy nagy vonalakban milyen adatokkal, fügvényekkel és a hozzájuk kapcsolódó paraméterlistákkal dolgoztam. Ez a 3.3-as ábrán látható. A kék elem a klienst szemlélteti, a sárgák pedig a szervert hivatottak megvalósítani.
+
+Az adatok mindenhol tartalmazzák a sevenCards és az everyCards adatokat, kivéve a helperFunctions-nál, hiszen onnan csak meghívom a függvényeket. A front end oldalon továbbá jelen van a myCards is, erre az esélyek ábrázolása miatt van szükség. Itt jelenítem meg a diagramokat a chartCalc függvénnyel. A chooseCard függvény veszi ki a lapokat a pakliból, amit majd továbbadok a szervernek, valamint a lapok megjelenítésében is szerepet játszik. A két backend függvény pedig két post request-et tartalmaz.
+
+A sárga részeken találhatóak azok az adatok és függvények, amik az esélyek számolásáért felelősek. A teljesség igénye nélkül, itt számolom a lehetséges érkező lapokat, ezekre az értékeket, sorba rendezem a lapokat, leszűkítem a csak a nevekre, és egyéb lent látható eseményeket.
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.9]{images/class-model.png}
+\caption{Az alkalmazás osztály diagrammja}
+\label{fig:class-model}
+\end{figure}
+
 \section{Front end kivitelezése}
 Egy webalkalmazás front end része az, amit a felhasználó érzékel az oldalról. Itt részletesen bemutatom a főbb egységeket, melyek Vue JS-ben íródtak. A HTML és CSS részekre csak minimálisan térek ki, itt pedig igyekszem azokat a megoldásokat bemutatni, melyek a legizgalmasabbak voltak a kivitelezés során. 
 
@@ -238,6 +280,74 @@ function calcPreflopChance(cards){
 \end{python}
 
 \subsection{Ellenfél esélyeinek számítása}
-findEnemyStorngest.js kifejtése
+Az ellenfél esélyeinek számítása egy kicsit bonyolultabb folyamat, mivel itt minden műveletnél 990-szer többet kell számolni, mint a saját esélyeinknél, hiszen az ellenfél kezében lévő két lapot nem ismerem.
+
+Ez a rész sokban megegyezik az előző alszakaszban kifejtett részekkel. Itt is definiááltam a paklit, megkapjuk a front end-től a kiválasztott lapokat, valamint szintén a getOnlyName és getJustDeck függvényekkel kezdünk. Mivel többek között ezeket a függvényeket ez a file és az előzőekben tárgyalt is használja, így egy külön helperFunctions.js file-ban tárolom el, hogy ne kelljen mindkét file-ban kétszer megírni.
+
+Ebben az esetben is az elágazás ágain szeretnék végigmenni, az elsőt részletesen bemutatni, majd a többit hozzá magyarázni. Első eset, mikor 7 hosszú a kapott tömb, tehát minden lapot ismerünk. Itt szükségem van az ellenfél 990 lehetséges lapjának az értékére. Ezt a createEnemysPossibleHands nevű függvény végzni.
+
+\begin{python}
+function createEnemysPossibleHands(allCards, sevenCardsName) {
+  let eCombination = [];
+  let everyCards = [...allCards];
+  let allCombinations = [];
+  for (let comb of G.combination(everyCards, 2)) {
+    allCombinations.push(comb.slice());
+  }
+  for (let comb of allCombinations) {
+    eCombination.push(comb.concat(sevenCardsName.slice(2, 7)));
+  }
+  return eCombination;
+}
+\end{python}
+
+Ez a függvény megkapja az összes kártyát, ami még a pakliban maradt, valamint a kiválasztott hét lapot. A maradék lapokon végigmegy egy ciklussal és kiválasztja belőle az összes 2-es lap kombinációját, szintén a generatorics javascript könyvtár segítségével. Ezután ezekhete a 2 lapokhoz hozzáfűzi a kapott tömb utolsó 5 elemét, hiszen ezek a közös lapok, amikkel keze alakulhat ki ellenfelünknek. Ezekkel az értékekkel visszatér.
+
+A default függvényben egy foreach ciklussal végigmegyünk ezeken a 7 lapos kombinációkon. A cikluson belül hasonló módon, mint a felhasználó esélyeinek számításánál, legenerálom a 7-es kombinációkból az 5-ös kombinációkat, majd a legkissebb értékűvel számolok tovább. Így 990 értéket fogok kapni, az összes lehetséges 2 lapra, ami az ellenfélnél lehet. Ezután front end-en már csak annyi a dolgom, hogy összeshasonlítsam a felhasználó lapjáinak értékét ezzel a 990-el, és megkapom, hogy hány százalék esélye van nyerni a felhasználónak.
+
+Ha még egy lapra várunk az asztalon, akkor az előbb említett lépéseket közrefogom egy for ciklussal, mely végigmegy a pakli lapjain és az adott lappal kiegészíti a tömbböt. Hasonló módon, mint a felhasználó esélyeinek számításánál, annyi különbséggel, hogy itt ügyelni kell a lap tömbből való kitörlésére is, hiszem a számításokat végző függvények megkapják a 7 lap mellett a pakliban maradt lapokat is. A törlést a removeItemOnce függvény végzi, mely szintén a helperFunctions-ben található, hiszen mindkét file-ban felhasználom.
+
+\begin{python}
+export function removeItemOnce(arr, value) {
+    let arrCopy = arr;
+    var index = arrCopy.indexOf(value);
+    if (index > -1) {
+      arrCopy.splice(index, 1);
+    }
+    return arrCopy;
+}
+\end{python}
+
+Flop esetében csakúgy mint eddig, két egymásba ágyazott for ciklussal valósítom meg a maradék két lap érkezését. Szintén a belső ciklus egyel előrébbről indul, mint a külső az ismétlődés elkerülése végett. Ilyenkor az 5 laphoz mindkét ciklusnál hozzáfűzzöm az adott kártyát, valamint kitörlöm a tömbből. Ezekre a tömbökre elvégzem ugyan azokat a lépéseket, mint eddig és megkapom az ellenfél összes lehetséges lapjára az értéket. Szintén összehasonlítom a felhasználó várható értékeivel laponként, majd ábrázolom a diagramon.
 
 \section{Kapcsolat a back end és a front end között}
+A back end és a front end közötti kapcsolatot két fügvénnyel valósítom meg, amelyekben egy-egy POST request szerepel. Mindkét esetben a body-ban átadaom a a sevenCards objektumot, amely tartalmazza a felhasználó által kiválasztott lapokat. Az egyik esetben a fetch-ben a mystrongest, a másikban az enemystrongest szerepel. A back end mindig az 5000-es porton kommunikál a fornt end-el.
+
+\begin{python}
+backendOfMyCards(e) {
+      e.preventDefault();
+      fetch("http://localhost:5000/mystrongest", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sevenCards: this.sevenCards }),
+      })
+        .then((res) => {
+          return res.json();
+        })
+        .then((json) => {
+          (this.myCards = json);
+        });
+    },
+\end{python}
+
+A függvény visszatér a back end-től kapott adatokkal, valamint a myCards tömmbe kerülnek a felhasználó esélyei. Az ellenfél esélyeinél természetesen az ő esélyeivel tér vissza a függvény, és az enemyCards tömböt tölti fel.
+
+Szerver oldalról a root.js file-ban található az a rész, amely a kapcsolatot végzi a kliens oldallal. Ide importáltam a findStrongest.js és findEnemyStrongest.js file-okat. Itt két POST response található. A különbség a kettő között, hogy míg az egyik a fent említett file-ok közül ez előbbit, a másik az utóbbit valósítja meg és küldi vissza. Egy változóba eltárolom a front end kérés body részét, erre meghívom az adott függvényt és ezzel vissza is küldöm a front end-nek.
+
+\begin{python}
+router.post('/mystrongest', (req, res, next) => {
+    let cards = req.body;
+    res.setHeader("Content-Type", "application/json")
+    res.json(findStrongest(cards)).send();
+});
+\end{python}
