@@ -4,16 +4,18 @@
 Ahhoz, hogy a szakdolgozat értelmet kapjon, mindenképp tisztázni kell néhány, a pókerrel kapcsolatos alapfogalmat, valamint a játék menetét. Ebben a szakaszban ezekről fogok írni.
 
 \subsection{A játék menetének kifejtése}
-A játék menetét illetően próbálok csak a számunkra releváns részletekre koncentrálni. Egy játék sok leosztásból áll, attól függ milyen típust játszunk. A játékosok száma is eltérő, általában 5 és 10 közötti látszámmal szokták játszani. Minden játékosnak kezdetben egyenlő összegű zsetonkészlete van, amivel játszhat. Mindig van egy osztó, akit az első leosztásnál solrsolnak, a tőle bal oldalon ülő játékos a kis vak, az osztótól balra a második játékos pedig a nagy vak. Ha van kijelölt osztó az asztalnál, akkor egy gombbal jelzik, ki birtokolja az osztó pozíciót, ez a gomb megy körbe. A játékot az óramutató járásával megyegyező irányban játszák.
+A játék menetét illetően próbálok csak a számunkra releváns részletekre koncentrálni. Egy játék sok leosztásból áll, attól függ milyen típust játszunk. A játékosok száma is eltérő, általában 5 és 10 közötti látszámmal szokták játszani. Minden játékosnak kezdetben egyenlő összegű zsetonkészlete van, amivel játszhat. Mindig van egy osztó, akit az első leosztásnál solrsolnak, a tőle bal oldalon ülő játékos a kis vak, az osztótól balra a második játékos pedig a nagy vak. Ha van kijelölt osztó az asztalnál, akkor egy gombbal jelzik, ki birtokolja az osztó pozíciót, ez a gomb megy körbe. A játékot az óramutató járásával megyegyező irányban játszák. % egy helyesírásellenőrzést majd eresz rá, van benne pár elgépelés 
 
-Amint be van rakva a kisvak és a nagy vak, kezdődhet a játék. Az osztó a kis vaknak oszt előszőr egy lapot, majd körbe mindenkinek, ezután megint egy lapot mindenkinek. A beszédet a nagy vak mellett ülő játékos kezdheti, vagyis ő nyilatkozhat először lapjairól. Alapvetően három választási lehetősége van, ahogy mindenkinek az asztalnál. Bedobja lapjait, beszáll, vagyis megadja az alaptétet, vagy pedig emel. Miután mindenki beszélt az asztalnál (utoljára a nagy vak), akkor az osztó egy lapot éget, vagyis letesz az asztalra fejjel lefelé, ami már nincs játékban. Ez után három lapot kirak egymás után, hogy mindenki lássa. Itt jön a második licitkör. Ebben az esetben már a kis vak kezdi a beszélést. Ugyan az a három lehetősége van, majd ha mindenki beszélt (az osztó utoljára), akkor még egy lap égetése, majd immáron csak egy lap asztalra helyezése következik. Megint jön egy licitkör, majd még egy égetés, és az utolsó felfordított lap az asztalra. Maradt még egy utolsó licitkör, és elérkeztünk a játék végéhez.
+Amint be van rakva a kisvak és a nagy vak, kezdődhet a játék. Az osztó a kis vaknak oszt előszőr egy lapot, majd körbe mindenkinek, ezután megint egy lapot mindenkinek. A beszédet a nagy vak mellett ülő játékos kezdheti, vagyis ő nyilatkozhat először lapjairól. Alapvetően három választási lehetősége van, ahogy mindenkinek az asztalnál. Bedobja lapjait, beszáll, vagyis megadja az alaptétet, vagy pedig emel. Miután mindenki beszélt az asztalnál (utoljára a nagy vak),% nem pontos, miután az utolsó licitkör lement 
+ akkor az osztó egy lapot éget, vagyis letesz az asztalra fejjel lefelé, ami már nincs játékban. Ez után három lapot kirak egymás után, hogy mindenki lássa. Itt jön a második licitkör. Ebben az esetben már a kis vak kezdi a beszélést. Ugyan az a három lehetősége van, majd ha mindenki beszélt (az osztó utoljára), % nem pontos, miután az utolsó licitkör lement 
+  akkor még egy lap égetése, majd immáron csak egy lap asztalra helyezése következik. Megint jön egy licitkör, majd még egy égetés, és az utolsó felfordított lap az asztalra. Maradt még egy utolsó licitkör, és elérkeztünk a játék végéhez.
 
-Abban az esetben nyer valaki, ha a bentmaradt játékosok közül neki van a legerősebb lapja, vagy ha nem maradt más játékban csak egy valaki. A lent lévő 5 lapból és a kezünkben lévő 2-ből, összesen 5-öt választhatunk ki, így alakul ki a kezünk. Ezzel lement egy parti a játékból. Valakinek gyarapodott a zsetonkészlete, valakinek csökkent.
+Abban az esetben nyer valaki, ha a bentmaradt játékosok közül neki van a legerősebb lapja, vagy ha nem maradt más játékban csak egy valaki. A lent lévő 5 lapból és a kezünkben lévő 2-ből, összesen 5-öt választhatunk ki, így alakul ki a kezünk. Ezzel lement egy parti a játékból. Valakinek gyarapodott a zsetonkészlete, valakinek csökkent. % jobb esetben. Lehet nincs változás.
 
 \begin{figure}[h]
 \centering
 \includegraphics[scale=0.4]{images/process-flow.png}
-\caption{Póker folyamatának szemléltetése}
+\caption{Folyamatábra a póker menetéről}
 \cite{process-flow}
 \label{fig:process-flow}
 \end{figure}
@@ -28,8 +30,8 @@ Elengedhetetlen, hogy tisztázzunk néhány alapfogalmat. Ezek a következők.
 \item Kezdeti bank (Initial pot): A vaktét és az esetleges alaptétek összege a licitálás megkezdése előtt.
 \item Kis vaktét (Small blind): Az osztó bal oldalán ölő játékos által a licitsorozat megkezdéseként kötelezően betett tét.
 \item Nagy vaktét (Big blins): A kis vak bal oldalán ölő játékos által kötelezően betett tét, a további akciók motiválására.
-\item Turn (Negyedik utca): A negyedik közös lap, ami színével fölfelé az asztal közepére kerül. A turn után újabb licitkör következik.
-\item River (Ötödik utca): Az ötödik és egyben utolsó közös lap, ami az asztal közepére kerül színével fölfelé. A river után az utolsó licitkör következik.
+\item Turn: A negyedik közös lap, ami színével fölfelé az asztal közepére kerül. A turn után újabb licitkör következik.
+\item River: Az ötödik és egyben utolsó közös lap, ami az asztal közepére kerül színével fölfelé. A river után az utolsó licitkör következik.
 \item Saját lapok (Hole cards): Az egyes játékosoknak a parti elején színével lefelé kiosztott két-két kártyalap. Ezeket a lapokat a többi játékos nem láthatja.
 \item Kéz: Egy játékos által, a lent lévő és a kezében lévő lapok közül kiválasztott öt lap.
 \item Nuts: A lehető legjobb kombinációval rendelkező játékos keze.
@@ -43,7 +45,7 @@ Nem kellett messzire mennem, hogy az elsőre rábukkanjak, hiszem a póker közv
 
 Létezik egy technika a témával kapcsolatban, amivel a profi póker játékosok az esélyeiket számolják. A lényege csupán annyi, hogy kiszámolják a lehetséges out-okat, amivel javul a kezük, ezeket megszorozzák kettővel, majd annyival, ahány lapra még várunk. Flop esetén kettővel, turn esetén egyel. Így kapnak egy számot, ami ha nagyobb, mint a banki esélyük, akkor matematikailag, vagy éppen gazdaságilag kifizetődő tartani a tétet. Ezzel a megoldással szemben az én elképzelésem alapján nem csak egy közelítő értéket fogunk kapni, hanem specifikusan minden lehetséges leosztásra egy pontos értéket kapunk, emellett még más adatokat is, melyek segítenek eldönteni a felhasználónak mi legyen a következő lépés.
 
-Az interneten a chardchat.com és a pokernews.com weboldalon lévő programot találtam a póker esélyek számítására. Mindkettő webalkalmazás és külalakra hasonlítanak az én elképzelésemre. Az előbbinél - amely a világ elsőszámú pókeres online közössége - csak úgy lehet használni az alkalmazást, ha legalább két játékosnak megadjuk a lapjait. Ezzel a probléma ugyan csak az, mint a fent említett televíziós közvetítéseknél ismert megoldással.
+Az interneten két hasonló programot találtam a póker esélyek számítására, mindkettő webalkalmazás és külalakra hasonlítanak az én elképzelésemre. Az elsőnél csak úgy lehet használni az alkalmazást, ha legalább két játékosnak megadjuk a lapjait. Ezzel a probléma ugyan csak az, mint a fent említett televíziós közvetítéseknél ismert megoldással. Ezt az alkalmazást a chardchat.com weboldalon találtam, ami a világ elsőszámú pókeres online közössége.
 
 \begin{figure}[h!]
 \centering
@@ -52,7 +54,7 @@ Az interneten a chardchat.com és a pokernews.com weboldalon lévő programot ta
 \label{fig:cardschat}
 \end{figure}
 
-A pokernews.com alkalmazás az, amely talán a legközelebb áll az én megoldásomhoz. Érdekesség, hogy ezt szintúgy egy óriás, pókerrel foglalkozó cég szponzorálta. A világ talán leghíresebb online póker platformja, a legnagyobb póker versenyek rendezője, a PokerStars. Ebben az esetben tudunk esélyeket számolni úgy is, hogy csak egy játékost választunk ki, csak úgy, mint az én megoldásomnál. Le tudunk rakni 1 és 9 között tetszőleges számú játékosokat, az alkalmazás pedig ezt figyelembe véve számolja az esélyeket. Ezen felül még további esélyeket is látunk, hogy hány százalék a valószínűsége annak, hogy párunk, drillünk, pókerünk, stb. alakuljon ki. Ez a megoldás nagy részben lefedi az általám kigondolt megvalósítást. A különbség, hogy én csak azt szeretném látni, hogy mennyi az esélyem a nyerésre. Az, hogy különböző kezek milyen esélyben alakulnak ki, számomra lényegtelen. Ezzel szemben olyan matematikai mutatók, mint az átlag, a medián vagy a relatív gyakoriság sokkal fontosabb tudni, hogy segítsen a felhasználónak bemutatni az esélyeit.
+A másik szoftver, ami talán a legjobban megközelíti a megoldásomat, a pokernews.com oldalán lévő webalkalmazás. Érdekesség, hogy ezt szintúgy egy óriás, pókerrel foglalkozó cég szponzorálta. A világ talán leghíresebb online póker platformja, a legnagyobb póker versenyek rendezője, a PokerStars. Ebben az esetben tudunk esélyeket számolni úgy is, hogy csak egy játékost választunk ki, csak úgy, mint az én megoldásomnál. Le tudunk rakni 1 és 9 között tetszőleges számú játékosokat, az alkalmazás pedig ezt figyelembe véve számolja az esélyeket. Ezen felül még további esélyeket is látunk, hogy hány százalék a valószínűsége annak, hogy párunk, drillünk, pókerünk, stb. alakuljon ki. Ez a megoldás nagy részben lefedi az általám kigondolt megvalósítást. A különbség, hogy én csak azt szeretném látni, hogy mennyi az esélyem a nyerésre. Az, hogy különböző kezek milyen esélyben alakulnak ki, számomra lényegtelen. Ezzel szemben olyan matematikai mutatók, mint az átlag, a medián vagy a relatív gyakoriság sokkal fontosabb tudni, hogy segítsen a felhasználónak bemutatni az esélyeit.
 \begin{figure}[h!]
 \centering
 \includegraphics[scale=0.5]{images/pokerstars.png}
@@ -62,7 +64,7 @@ A pokernews.com alkalmazás az, amely talán a legközelebb áll az én megoldá
 
 \cite{cardschat}
 \cite{pokerstars}
-\cite{harrington}
+\cite{harrington} %hivatkozások mehetnek az utolsó mondat még. Ne álljanak külön 
 
 \Section{Felhasznált technológiák}
 Ebben a szakaszban bemutatom az összes olyan technológiát, programozási nyelvet, keretrendszert vagy könyvtárat, amit felhasználtan a szakdolgozatom elkészítése során. Törekszem a tömör magyarázatra. Mindegyiknél próbálom elmagyarázni miért választottam, valamint mik az előnyei, amik számomra kedvezőek voltak.
@@ -82,8 +84,8 @@ A maga 18 KB-os méretével rendkívül kicsinek számít, amit könnyű letölt
 
 Többek között a Vue JS egyik fő tulajdonsága - ami megvan a többi SPA-ban is - hogy komponensekből épül fel, amiket újra felhasználhatunk, ezzel is elősegíti a rövidebb programkódot, átláthatóságot, egyszerűséget, amiket már fent említettem.
 
-Ezek miatt esett a választásom a Vue JS-re, amire több forrás keretrendszerként, mások pedig könyvtárként hivatkoznak.
-\cite{vue}
+Ezek miatt esett a választásom a Vue JS-re, amire több forrás keretrendszerként, mások pedig könyvtárként hivatkoznak
+\cite{vue}. %hivatkozást a mondatba rakunk. Ott ahol hivatkoztunk rá. lásd előző mondtat. 
 
 \subsection{Node JS és az Express}
 
@@ -147,7 +149,7 @@ Itt is az egyszrűséget tartom szem előtt. Középen helyezkedik el egy póker
 
 Minden licitkör előtt az asztal mellett láthatja a felhasználó az összesített nyerési esélyét, ami segít neki a döntés meghozásában. Ha több lapot szeretne a felhasználó az asztalra tenni mint a 2 (saját) + 5 (közös), akkor egy pop up ablak ugrik fel, ami jelzi neki, hogy már több lapot nem használhat. Két választása van ebben az esetben, az egyik, hogy figyelmen kívül hagyja, ilyenkor elemezheti tovább az esélyeket. A másik, hogy új leosztást kezd, ilyenkor eltűnik minden lap az asztalról és folytathatja a játékot.
 
-\subsection{Alapötlet}
+\subsection{Alapötlet} % Jól megírtad és átadtad a lényeget. 
 A tervezés első lépése a módszer meghatározása volt, amellyel az esélyeket számoljuk. Ezt hátulról előre haladva közelítettem meg, azaz a rivernél kezdtem, a turn-ön át, egészet a preflopig. Ennek oka az volt, hogy a legkevesebb számítás akkor van, amikor minden lap lent van és tudjuk, hogy nekünk milyen erős kezünk van, így azzal ebben az esetben nem kell folglakozni, tehát bonyolultsági sorrendben haladtam.
 
 Az alapötlet az volt, hogy legenerálom az összes lehetséges 7 lap együttesét, amelyekhez egy értéket rendelek, hogy mennyire erősek. Természetesen a legerősebb a royal flush, a leggyengébb pedig a 7-es magaslap. Csak, hogy szemléltessem a számolások bonyolultságát és nagyságát, ez \[ \binom{52}{7}=133.784.560\] eset. Turn esetében ismerem az én 7 lapomat, tehát csak egy keresést kell végezni ebben az adathalmazban, ami visszatér a kezem értékével. Az ellenfél esélyeinek kiszámítása már egy kicsit komplikáltabb. Az 52 lapból ismerünk 7-et, tehát a pakliban 45 lap marad. Ebből választhat további 2 lapot az ellenfél, ez \[ \binom{45}{2}=990\] lehetőség az ellenfél kezeire. Ez a szám fontos szerepet játszik a dolgozat történetében, és végig jelen lesz a dokumentációban. Erre a 990 lehetőségre mind el kell végezni a keresést a kb. 133 milliós adathalmazban, így kapunk 990 értéket. Innentől kezdve már csak az a dolgunk, hogy hány százalékban kissebb a mi kezünk értéke az ellenfél lehetséges kezeinél. 
@@ -156,7 +158,12 @@ Tovább haladva a turn esetében vizsgáljuk az esélyeket, amikor is csak 4 lap
 
 A flop esetében lévő értékek számításánál még több számítást kell végeznünk. A saját két lapunkon kívül itt már csak három lent lévő lapot ismerünk. Ez azt jelenti, hogy turn-re jöhet 47 féle lap, river-re pedig további 46 féle. A saját lapjaink \[ \binom{47}{2}=1081\] féle képpen jöhetnek le. Ezek alapján az ellenfélnek \[1081\cdot990=1.070.190\] lehetséges keze van. Ezekre a lehetséges kombinációkra mind keresést kell végeznünk az adathalmazban, hogy megkapjuk a saját és az ellenfél értékeit, amivel tovább tudunk dolgozni.
 
-Az utolsó licitkör, aminél számításokat kell végeznünk, az tulajdonképpen a játék menetét illetően az első licitkör. A preflop esetben nem ismerünk semmilyen lapot, csak azt a kettőt, amit osztottak nekünk. Az 52 lapos pakliból 50 lap érkezhet az asztalon lévő első helyre, a másodikra 49, az ötödikre, vagyis az utolsóra pedig 46 lehetséges lap. Itt kell a legtöbb számítást végezni, amikor is \[ \binom{50}{5}=2,118,760\] különbözőképpen alakulhat ki a saját kezünk. Ezt megszorozva a már ismert rivern-nél lévő ellenfél kezeinek kombinációjával, az ellenfél lehetséges kezeinek száma \linebreak 2.097,572.400, ami több, mint két milliárd eset. Ennyi értékkel kell majd számolnunk a továbbiakban. Ez jól mutatja, hogy milyen összetett a problémakör és, hogy mennyi számítást igényel. Az alapötletben ezt nem számoljuk valós időben, hiszen rengeteg időt venne igénybe. Ehelyett egyszer legeneráljuk ezeket a kombinációkat az összes lehetséges kézre preflop, ami 1326 lehetőség, tehát ennyivel kell megszoroznunk még a fent említett számot.
+<<<<<<< Updated upstream
+Az utolsó licitkör, aminél számításokat kell végeznünk, az tulajdonképpen a játék menetét illetően az első licitkör. A preflop esetben nem ismerünk semmilyen lapot, csak azt a kettőt, amit osztottak nekünk. Az 52 lapos pakliból 50 lap érkezhet az asztalon lévő első helyre, a másodikra 49, az ötödikre, vagyis az utolsóra pedig 46 lehetséges lap. Itt kell a legtöbb számítást végezni, amikor is \[ \binom{50}{5}=2,118,760\] különbözőképpen alakulhat ki a saját kezünk. Ezt megszorozva a már ismert rivern-nél lévő ellenfél kezeinek kombinációjával, az ellenfél lehetséges kezeinek száma 2.097.572.400, ami több, mint két milliárd eset. Ennyi értékkel kell majd számolnunk a továbbiakban. Ez jól mutatja, hogy milyen összetett a problémakör és, hogy mennyi számítást igényel. Az alapötletben ezt nem számoljuk valós időben, hiszen rengeteg időt venne igénybe. Ehelyett egyszer legeneráljuk ezeket a kombinációkat az összes lehetséges kézre preflop, ami 1326 lehetőség, tehát ennyivel kell megszoroznunk még a fent említett számot.
+=======
+Az utolsó licitkör, aminél számításokat kell végeznünk, az tulajdonképpen a játék menetét illetően az első licitkör. A preflop esetben nem ismerünk semmilyen lapot, csak azt a kettőt, amit osztottak nekünk. Az 52 lapos pakliból 50 lap érkezhet az asztalon lévő első helyre, a másodikra 49, az ötödikre, vagyis az utolsóra pedig 46 lehetséges lap. Itt kell a legtöbb számítást végezni, amikor is \[ \binom{50}{5}=2,118,760\] %valahol vesszőt valahol pontot, valahol semmit nem használsz a helyiérték jelölésére. Légy konziztens! 
+különbözőképpen alakulhat ki a saját kezünk. Ezt megszorozva a már ismert rivern-nél lévő ellenfél kezeinek kombinációjával, az ellenfél lehetséges kezeinek száma \linebreak 2.097,572.400, ami több, mint két milliárd eset. Ennyi értékkel kell majd számolnunk a továbbiakban. Ez jól mutatja, hogy milyen összetett a problémakör és, hogy mennyi számítást igényel. Az alapötletben ezt nem számoljuk valós időben, hiszen rengeteg időt venne igénybe. Ehelyett egyszer legeneráljuk ezeket a kombinációkat az összes lehetséges kézre preflop, ami 1326 lehetőség, tehát ennyivel kell megszoroznunk még a fent említett számot.
+>>>>>>> Stashed changes
 
 \subsection{Esélyek vizsgálata}
 A piackutatás során derült fény számomra arra, hogy a legtöbb ehhez hasonló alkalmazás csak egy átfogó százalékos esélyt adott az éppen aktuális leosztásról. Ez volt az egyik motivációm arra, hogy az én alkalmazásom ennél többet adjon a felhasználónak.
