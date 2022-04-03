@@ -1,2 +1,116 @@
 \Chapter{Optimalizálás}
 
+\section{Probléma kifejtése}
+Mikor már az alkalmazás hozzávetőlegesen elérte végső fázisát, és már a funkciók nagy része működött, akkor derült fény arra a problémára, amit már előre lehetett sejteni, ez pedig a futási idő. Mivel nagyon sok számítást kell elvégeznie a programnak, így elkerülhetetlen, hogy lassabban működjön az alkalmazás. Ebben a fejezetben ezt a problémakört fejtem ki.
+
+A lassúság funkcionális problémát nem okoz, mivel a célként kitőzött feladatokat a program elvégzi. Ez inkább a felhasználási mód rovására megy. Az alap elképzelés ugyanis úgy szólt, hogy egy olyan végeredményt kapok, amit egy asztalnál, élő pókerezés közben úgynevezett csaló szoftverként tudok használni, ami elvégzi a gondolkodást helyettem. Hogyha 30 percet kell várni arra, hogy a flop-on kiszámolja a program, milyen esélyeim vannak, akkor azt a gyakorlatban nem lehet effektíven felhasználni.
+
+\section{Lehetőségek vizsgálata}
+Ahhoz, hogy optimalizálni tudjam az alkalmazást, először meg kell vizsgálni, mi okozhatja a lassulást, vagy hol lehet változtatni a kódon. A leginkább akkor szembetűnően lassú a program, mikor az ellenfél esélyeit vizsgálom. Ezért optimalizálási szempontból kizárólag a back end-re, azon belül is leginkább a findEnemyStrongest.js forráskódjára fókuszáltam.
+
+Az alábbiakban felsorolom azokat a tényezőket, amiket változtatni terveztem a program gyorsítása érdekében. Ezeket később pontról pontra kifejtem, bemutatva az eredeti és a módosított megoldásokat, valamint megpróbálom szemléltetni az elért gyorsulást, amennyiben tapasztalható egyáltalán.
+\begin{itemize}
+    \item Adathalmaz átszervezése: Mivel az adathalmazban az elemek kártya értékek szerint voltak sorba rendezve, így eszerint kellett rendeznem az asztalon lévő lapokat is. Ehelyett ABC sorrendbe rendezem a gyorsabb keresés érdekében.
+    \item Tömbök előre allokálása és indexelése: Mivel az, hogy adott esetben hány értéket kapunk az ellenfél lehetséges lapjaira, ismert, ezért ahelyett, hogy minden esetben push-olok egy értéket a tömbbe, inkább előre definiálom és az aktuális elemet mindig hozzáadom.
+    \item Függvények kiszervezése: Alap esetben nem túl esztétikus, ha a default függvényben több soros programkódok vannak. Ezen kívül úgy gondoltam, gyorsulni fog a program, ha amit csak lehetséges külön függvénybe szervezek, amit utána csak meg kell hívnom.
+\end{itemize}
+
+\section{Optimalizálás megvalósítása}
+
+\subsection{Adathalmaz átszervezése}
+Az adathalmazom alapvetően kártyaértékek szerint volt rendezve. Egyrészt azért, mert a forrásban is így volt tárolva, másrészt az emberi szem számára is könnyebben értelmezhető így. Tehát a royal flush megfelelője a "AKQJTF" volt, az F azt jelöli, hogy figyelembe kell venni, hogy egyező színűek a lapok. Mivel az adathalmazban így voltak rendezve az elemek, az aktuálisan kiválasztott lapokat is ilyen módon kellett sorba állítanom. Első körben logikusnak tűnt ez a megoldás, viszont a megvalósítása kicsit hosszú programkódot eredményezett. 
+
+\begin{python}
+function sortCardOrder(string, colors) {
+  let ordered = "";
+  let timesArray = [
+    (string.match(/A/g) || []).length,
+    (string.match(/K/g) || []).length,
+    .
+    .
+  for (let i = 0; i < timesArray[0]; i++) {
+    ordered += "A";
+  }
+  for (let i = 0; i < timesArray[1]; i++) {
+    ordered += "K";
+  }
+  .
+  .
+  if (colors["C"] == 5) {
+    ordered += "F";
+  } else if (colors["H"] == 5) {
+    ordered += "F";
+  } else if (colors["S"] == 5) {
+    ordered += "F";
+  } else if (colors["D"] == 5) {
+    ordered += "F";
+  }
+
+  return ordered;
+}
+\end{python}
+
+Látható, hogy mind a 13 lapot külön kellett vizsgálnom, és úgy összefűzni egy string-é. A függvény végén az egyező színeket számolom össze, amennyiben létezik olyan lehetőség, hogy 5 egyforma színű kártya van, akkor hozzáfűzök a string végére egy "F"-et.
+
+Először az adathalmazt kellett módosítanom. Mindössze annyi történt, hogy az elemek nem értékek szerint lettek sorbarendezve, hanem ABC sorrend szerint. A fenti példánál maradva, így a "AKQJTF"-ből "AFJKQT" lett. Ennek köszönhetően nem volt szükség az összes kártyát külön vizsgálnom.
+
+A módosított függvény elején szintén vizsgálom a színeket, viszont utána már csak beépített függvényeket használok. A sorba rendezésre a sort() függvény használható, viszont az csak egy tömb elemeit rendezi sorba, nekem viszont az elemek betűit kell sorba rendeznem. Éppen ezért használom még a split(), illetve a join() függvényeket. Az előbbi feldarabolja az elemeket jelen esetben karakterekre, hogy azokat tudjam rendezni. Az utóbbira azért van szükség, hogy a feldarabolt, sorba rendezett értékeket újra összefűzze string-ekké, így ugyanannyi elemű tömböt kapunk vissza, mint ahány elemű a függvények hívása előtt volt. 
+
+\begin{python}
+function sortCardOrder(string, colors){
+    let ordered = string;
+    if(colors['C'] == 5){
+      ordered+='F'
+    } else if(colors['H'] == 5){
+      ordered+='F'
+    } else if(colors['S'] == 5){
+      ordered+='F'
+    } else if(colors['D'] == 5){
+      ordered+='F'
+    }
+  
+    return ordered.split('').sort().join('');
+}
+\end{python}
+
+\subsection{Tömbök előre allokálása és indexelése}
+A tömbök létrehozására a push függvényt használom. Minden lehetséges lapkombináció kiszámításánál ezzel a függvénnyel töltöm fel a tömböket, amikkel majd visszatérek és átadom a front end-nek. Ezt a függvényt, például flop-on az ellenfél esélyeinek számításánál 1.070.190-szer hívom meg. Az volt a feltevésem, hogy ez a módszer lényegesen lassítja a szoftver működését.
+
+Mivel minden vizsgálatnál adott, hogy hány elemű lesz a tömb, így meg lehet oldani, hogy a tömböket előre allokálom. Az elágazások elején definiálom a tömböket, hogy hány eleműek legyenek, majd a feltöltéskor mindig az éppen aktuális elemet hozzáfűzöm ehhez a tömbhöz. A vizsgálatoknál több helyen foreach cilust használok, ennek a hátránya, hogy nem tudom a tömböket indexelni. Hogyha előre allokálom a tömbböket, akkor szükségem van az indexelésre. Ennek érdekében azokon a helyeken, ahol meg szeretném ezt valósítani át kell alakítanom a foreach ciklusokat egyszerű for ciklusokká.
+
+\subsection{Függvények kiszervezése}
+A default függvényemben és azon kívül is sok helyen nagyon hosszú programkódok szerepeltek. A terv az volt, hogy ezeket külön függvényekbe szervezem ki. Egyrészt gyorsulást reméltem ettől, másrészt esztétikai és átláthatósági problémákat okoz, ha egy nagy, ömlesztett kódból áll az egész program.
+
+Próbáltam minél rövidebb kódot kapni, ennek érdekében az első lépésem az volt, hogy megvizsgáltam melyek azok a programrészletek, amelyeket a findStrongest.js és a findEnemyStrongest.js file-ban is felhasználok. Létrehoztam a helperFuncitons.js-t, amibe kiszerveztem ezeket a részleteket külön függvénybe, majd a többi file-ba már csak importálnom kellett és fel is tudtam használni. Az alábbi kódokat szerveztem ki külön függvénybe és helyeztem a helperFuncitons-js-be.
+
+\begin{itemize}
+    \item removeItemOnce(): Ez a függvény megkap egy tömböt és egy értéket, majd kitörli a kapott tömbből a kapott értéket, ezután visszatér a szűkített tömbbel.
+    \item sortCardOrder(): Ez az adathalmaz átszervezésénél tárgyalt függvény. Eleinte ez is ömlesztve, ismétlődve szerepelt mind a két file-omban. Az optimalizált változatot is kiszerveztem.
+    \item getOnlyName(): Front end-en egy objektumban tárolom azokat a kártyákat, melyeket kiválasztott a felhasználó. Back end-en az objektumból csak egy értékre van szükségem, a kártyák neveire, azt viszont egy tömbben is el tudom tárolni. Ez a függvény pont ezt hivatott megvalósítani. Szintén a helperFuncitons.js-be került.
+    \item getJustDeck(): Ez egy gyakran használt részlet. Megkapja az összes kártyát, valamint a kiválasztott lapokat. Visszatér ennek a különbségével, tehát a pakliban maradt kártyákkkal.
+\end{itemize}
+
+A közös részek kiszervezésével lényegesen rövidebb lett a programkód. Ezután az összes file-ban igyekeztem a default függvény hosszát a minimumra csökkenteni. A leginkább szembetűnő változás a findStrongest.js default függvényében történt. Az optimalizálás előtt 80 soros volt ez a függvény, a végére pedig sikerült lecsökkenteni 30 sorosra. Ezt az összesen 110 sor programkódot nem szemléltetném, inkább csak a leglényegesebb részt. Az eddigi 2 külön függvényből lett 5, ammiből a legtöbb változást a createStrongest függvény hozta.
+
+\begin{python}
+function createStrongest(combinations){
+  let rawdata = fs.readFileSync("data.json");
+  let strenghtOrder = JSON.parse(rawdata);
+  let result =  [];
+  for (let combination of combinations) {
+    let nameString = "";
+    let colors = { C: 0, S: 0, H: 0, D: 0 };
+    for (let card of combination) {
+      nameString += card[0];
+      colors[card[1]] += 1;
+    }
+    let ordered = sortCardOrder(nameString, colors);
+    result.push(strenghtOrder.cardStrenght[ordered]);
+  }
+  return Math.min(...result);
+}
+\end{python}
+
+Ez a részlet valósítja meg azt, amit a felhasználó magától is el tud dönteni. Megkap 25, 5 elemű tömböt, ezek a 7 lerakott lapból kiválasztható 5 lap. Ezeket mind megkeresi az adathalmazban, majd a legkissebb értékűvel tér vissza. Tehát megadja, hogy a választható 7 lap közül melyik 5 lap az, amelyik a legerősebb, ez lesz a játékosé. Ezt a keresést akkor is el kell végezni, amikor ismerjük az összes lapot, valamint akkor is, mikor csak 5-öt vagy 6-ot. Ezek alapján a default függvényben ez a részlet háromszor szerepelt. Éppen ezért sikerült ezzel elérni szembetűnően rövidebb kódot.
+
+\section{Eredmények kiértékelése}
