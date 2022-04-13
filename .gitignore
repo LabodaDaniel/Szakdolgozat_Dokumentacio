@@ -1,0 +1,10 @@
+chapters/*.aux
+*.aux
+*.bbl
+*.blg
+*.pdf
+*.out
+*.synctex.gz
+*.toc
+*.thm
+*.log
