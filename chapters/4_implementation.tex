@@ -144,7 +144,20 @@ Annak érdekében, hogy a futási időről készült méréseim hitelesek legyen
 
 Másik tényező, amit fontosnak tartottam egységesíteni az a hardver, amin futtatom az alkalmazást. A méréseket ugyan azon a számítógépen végeztem. Csak a kliens, a szerver, és a böngésző futott a gépen, ezzel is elősegítve azt, hogy más, háttérben futó alkalmazás nem befolyásolja a mérést. 
 
-Eredmények bemutatása...
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.9]{images/running-time.png}
+\caption{Futási idők módosításonként}
+\label{fig:running-time}
+\end{figure}
+
+A 4.1-es ábrán láthatóak a futási idők mind a három módosításra levetítve, valamint a preflop utáni licitkörökre. Mint azt az ábra is jól mutatja, sajnos nem sikerült a várt gyorsulást elérni, viszont érdekesek az eredmények, amiket kaptam.
+
+A legnagyobb javulást az adathalmaz átszervezésével értem el. A river-nél egy fél másodperces lassulás tapasztalható, viszont a turn esetében már 22 másodperves javulást látunk. Futási idő szempontjából a flop a legkritikusabb, itt pedig több, mint két percis javulást eredményezett a módosítás. Ebből a szempontból elhanyagolható, a fél másodperces lassulást river-nél, hiszen az kevésbé feltűnő a felhasználónak, mint a flop számításának lassúsága.
+
+A tömbök előre allokálása és indexelése minimális javulást hozott. River esetében megközelítőleg egy tizedmásodperces, turn-nél 3 másodperces, flop-nál pedig 24 másodperces gyorsulást tapasztaltam. Ezek alapján elmondható, hogy a push függvény nem lassítja lényegesen a futási időt.
+
+Nagyon érdekes, hogy a függvények kiszervezése nemhogy gyorsulást nem eredményezett, de kifejezetten lassította a programot. A lehetőségek vizsgálata alszakaszban is látható, hogy két fő célom volt ennek a megvalósításával, azű futási idő javítása jól láthatóan nem volt sikeres. A másik célom viszont a programkód jobban olvashatóvá, és esztétikusabbá tétele volt. Flop esetében több, mint 10 perces lassulást hozott a függvények kiszervezése. Alap esetben nem kellene érezhetőnek lennie, hogy egy programrészletet közvetlen futtatunk, vagy egy külön függvénybe írjuk és úgy hívjuk meg. Az én esetemben viszont, a flop-nál maradva, ezt a függvényt 1.070.190-szer kell meghívnom. Valószínüleg ha ennyiszer hívunk meg egy függvényt, akkor ott már szembetűnő lesz ez az időtartam, ez okozhatja jelen esetben is a lassulást. Ezeket figyelembevéve két lehetőségem volt, az egyik, hogy elvetem ezt a megoldást és a default függvényben marad ugyan az a programkód többször is. A másik, hogy elfogadom az ezzel járó lassulást, cserébe esztétikusabb lesz a kódsor. Mivel nem tervezem az alkalmazást publikálni, így inkább amellett döntöttem, hogy a szakdolgozatom szempontjából hasznosabb, ha inkább az átlátható programkód mellett döntök.
 
 \section{Működés ellenőrzése}
 Az alkalmazás véleményem szerint elérte végső formáját. Nem maradt más hátra, mint a tesztelés, hogy megbizonyosodjak, az alkalmazás rendben működik. Ehhez, a szakdolgozat elején említett hasonló szoftverek egyikét hívtam segítségül. Azt választottam, amelyikben ki lehet választani azt, hogy hány játékossal játszunk. A szoftver alap működését meglehetősen egyszerűen lehet tesztelni ennek a segítségével. Mindössze annyit kell megvizsgálnom, hogy az általam készített program ugyanazt a százalékos végeredményt adja-e, mint az interneten találté.
@@ -168,8 +181,6 @@ Eddig az alkalmazás az elvártaknak megfelelően működik. A flop-nál és a t
 \caption{Az alkalmazásom számítási eredménye river-nél}
 \label{fig:test-my}
 \end{figure}
-
-\newpage
 
 A diagramm helyes működésének a vizsgálata már bonyolultabb folyamat. Ebben az esetben azt a megoldást választottam, hogy egy olyan kártyakombinációt választok, amelynek viszonylag egyedi diagrammja lesz. Például turn-nél négy treff van az asztalon, a felhasználó kezében két káró van és sem párt, sem erősebb kezet nem alkotnak a lapok. Ebben az estben, ha még egy pikk értkezne river-nél, akkor a board-on lévő lapok flush-t alkotnának, amit a program nyereségként ábrázol. Tehát a diagrammon azt kell látnunk, hogy a maradék pikk lapok esetén nagyon magas a nyerési esélye a felhasználónak.
 
