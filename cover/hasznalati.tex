@@ -4,17 +4,22 @@
 
 \vskip 1cm
 
-Ennek a címe lehet például \textit{A mellékelt CD tartalma} vagy \textit{Adathordozó használati útmutató} is.
+A CD gyökerében lévő szakdolgozat jegyzékben két jegyzék található. A dolgozat, és a program jegyzék. 
 
-Ez jellemzően csak egy fél-egy oldalas leírás.
-Arra szolgál, hogy ha valaki kézhez kapja a szakdolgozathoz tartozó CD-t, akkor tudja, hogy mi hol van rajta.
-Jellemzően elég csak felsorolni, hogy milyen jegyzékek vannak, és azokban mi található.
-Az elkészített programok telepítéséhez, futtatásához tartozó instrukciók kerülhetnek ide.
+A dolgozat jegyzékben található a dolgozat LaTeX forráskódja, és a .pdf formátuma is, dolgozat.pdf néven. 
 
-A CD lemezre mindenképpen rá kell tenni
+A program jegyzékben található a webalkalmazás forráskódja. 
+
+Fel kell telepíteni a node.js-t, amit a https://nodejs.org/en/ oldalról lehet letölteni.
+
+Node.js telepítése után, a parancssorban a következő utasítást kiadva: \texttt{npm install vue} feltelepül a Vue.js keretrendszer.
+
+
+Miután elkészültünk ezekkel, a program jegyzékben találunk egy frontend és egy backend jegyzéket. Mind a két jegyzékben ki kell adni az alábbi parancsokat: 
 \begin{itemize}
-\item a dolgozatot egy \texttt{dolgozat.pdf} fájl formájában,
-\item a LaTeX forráskódját a dolgozatnak,
-\item az elkészített programot, fontosabb futási eredményeket (például ha kép a kimenet),
-\item egy útmutatót a CD használatához (ami lehet ez a fejezet külön PDF-be vagy MarkDown fájlként kimentve).
+    \item \texttt{npm install}
+    \item \texttt{npm run serve}
 \end{itemize}
+
+
+A frontend jegyzék parancssorában megjelenő ://Localhost címen fogjuk elérni a programot a böngészőnkből.
