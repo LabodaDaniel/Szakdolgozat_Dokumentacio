@@ -15,7 +15,7 @@ Abban az esetben nyer valaki, ha a bent maradt játékosok közül neki van a le
 \begin{figure}[h]
 \centering
 \includegraphics[width=\textwidth]{images/process-flow.png}
-\caption{Folyamatábra a póker menetéről \cite{process-flow}} %hivatkozás 
+\caption{Folyamatábra a póker menetéről \cite{process-flow}} 
 \label{fig:process-flow}
 \end{figure}
 
@@ -45,8 +45,6 @@ Nem kellett sokáig kutatni, hogy az elsőre rábukkanjak, hiszen a póker közv
 
 Létezik egy technika a témával kapcsolatban, amivel a profi póker játékosok az esélyeiket számolják. A lényege csupán annyi, hogy kiszámolják a lehetséges out-okat, amivel javul a kezük, ezeket megszorozzák kettővel, majd annyival, ahány lapra még várunk. Flop esetén kettővel, turn esetén eggyel. Így kapnak egy számot, ami ha nagyobb, mint a banki esélyük, akkor matematikailag, vagy éppen gazdaságilag, kifizetődő tartani a tétet. Ezzel a megoldással szemben, az én elképzelésem alapján nem csak egy közelítő értéket fogunk kapni, hanem specifikusan minden lehetséges leosztásra egy pontos értéket kapunk, emellett még más adatokat is, melyek segítenek eldönteni a felhasználónak mi legyen a következő lépés.
 
-% TODO: Érdekes lett volna a végén számszerűen összehasonlítani, hogy a leírt egyszerűbb becslés milyen pontosságú közelítést ad.
-
 Az Interneten két hasonló programot találtam a póker esélyek számítására. Mindkettő webalkalmazás és külalakra hasonlítanak az én elképzelésemre. Az elsőnél csak úgy lehet használni az alkalmazást, ha legalább két játékosnak megadjuk a lapjait. Ezzel a probléma ugyan csak az, mint a fent említett televíziós közvetítéseknél ismert megoldással. Ezt az alkalmazást a \textit{chardchat.com} weboldalon találtam, ami a világ elsőszámú pókeres online közössége. Az alkalmazásról láthatunk egy képet \aref{fig:cardschat}. ábrán.
 
 \begin{figure}[h!]
@@ -75,7 +73,7 @@ Tovább haladva a turn esetében vizsgáljuk az esélyeket, amikor is csak 4 lap
 
 A flop esetében lévő értékek számításánál még több számítást kell végeznünk. A saját két lapunkon kívül itt már csak három lent lévő lapot ismerünk. Ez azt jelenti, hogy turn-re jöhet 47 féle lap, river-re pedig további 46 féle. A saját lapjaink \[ \binom{47}{2}=1'081\] féleképpen jöhetnek le. Ezek alapján az ellenfélnek \[1081\cdot990=1'070'190\] lehetséges keze van. Ezekre a lehetséges kombinációkra mind keresést kell végeznünk az adathalmazban, hogy megkapjuk a saját és az ellenfél értékeit, amivel tovább tudunk dolgozni.
 
-Az utolsó licitkör, aminél számításokat kell végeznünk, az tulajdonképpen a játék menetét illetően az első licitkör. A preflop esetben nem ismerünk semmilyen lapot, csak azt a kettőt, amit osztottak nekünk. Az 52 lapos pakliból 50 lap érkezhet az asztalon lévő első helyre, a másodikra 49, az ötödikre, vagyis az utolsóra pedig 46 lehetséges lap. Itt kell a legtöbb számítást végezni, amikor is \[ \binom{50}{5}=2'118'760\] féleképpen alakulhat ki a saját kezünk. Ezt megszorozva a már ismert rivern-nél lévő ellenfél kezeinek kombinációjával, az ellenfél lehetséges kezeinek száma\linebreak 2'097'572.400, ami több, mint kétmilliárd eset. Ennyi értékkel kell majd számolnunk a továbbiakban. Ez jól mutatja, hogy milyen összetett a problémakör és hogy mennyi számítást igényel. Az alapötletben ezt nem számoljuk valós időben, hiszen rengeteg időt venne igénybe. Ehelyett egyszer legeneráljuk ezeket a kombinációkat az összes lehetséges kézre preflop, ami 1'326 lehetőség, tehát ennyivel kell megszoroznunk még a fent említett számot.
+Az utolsó licitkör, aminél számításokat kell végeznünk, az tulajdonképpen a játék menetét illetően az első licitkör. A preflop esetben nem ismerünk semmilyen lapot, csak azt a kettőt, amit osztottak nekünk. Az 52 lapos pakliból 50 lap érkezhet az asztalon lévő első helyre, a másodikra 49, az ötödikre, vagyis az utolsóra pedig 46 lehetséges lap. Itt kell a legtöbb számítást végezni, amikor is \[ \binom{50}{5}=2'118'760\] féleképpen alakulhat ki a saját kezünk. Ezt megszorozva a már ismert rivern-nél lévő ellenfél kezeinek kombinációjával, az ellenfél lehetséges kezeinek száma\linebreak 2'097'572'400, ami több, mint kétmilliárd eset. Ennyi értékkel kell majd számolnunk a továbbiakban. Ez jól mutatja, hogy milyen összetett a problémakör és hogy mennyi számítást igényel. Az alapötletben ezt nem számoljuk valós időben, hiszen rengeteg időt venne igénybe. Ehelyett egyszer legeneráljuk ezeket a kombinációkat az összes lehetséges kézre preflop, ami 1'326 lehetőség, tehát ennyivel kell megszoroznunk még a fent említett számot.
 
 \Section{A grafikus felület elemei}
 
@@ -89,15 +87,11 @@ Minden licitkör előtt az asztal mellett láthatja a felhasználó az összesí
 
 A piackutatás során derült fény számomra arra, hogy a legtöbb ehhez hasonló alkalmazás csak egy átfogó százalékos esélyt ad az éppen aktuális leosztásról. Ez volt az egyik motivációm, hogy az alkalmazásomban ennél több információ álljon rendelkezésre a felhasználónak.
 
-% TODO: Az oszlopdiagramokat a dolgozat végén (a korábbi tesztelés fejezet helyén például) érdemes lenne példákon keresztül be is mutatni.
-
-Azon kívül, hogy egy összefogó százalékos esélyt számítok minden licitkörnél, létrehozok egy oszlopdiagrammot is, amelyben minden lehetséges következő lap(ok)ra kirajzolom, hogy annál a losztásnál milyen százalékban nyer a felhasználó. Rivernél ennek nincs sok jelentősége, mivel ismerjük az összes lapot. Itt csak két oszlop lesz, az én, illetve az ellenfél nyerési esélye. Turn-nél 46 lap érkezhet még, így 46 oszlopunk lesz, aminél láthatjuk, hogy melyik esetben mennyi esélyünk van nyerni, ezek mellett természetesen az összesített esélyt is megjelenítem. Erre azért van szükség, hogy tisztább képet nyújtsak a felhasználó számára az esélyeiről. Egy példán keresztül megvilágítva, lehet, hogy a turn-ön 70\% esélyünk van a nyerésre, viszont, ha ez úgy adódik össze, hogy 9 esetben 100\% az esélyünk, 11 esetben 90\%, 6 esetben 80\%, a maradék 20 esetben pedig 40\%, akkor jobban át kell gondolnunk a következő lépésünket, mintha ez a 70\% egymáshoz közel álló számokból alakulna ki.
+Azon kívül, hogy egy összefogó százalékos esélyt számítok minden licitkörnél, létrehozok egy oszlopdiagrammot is, amelyben minden lehetséges következő lap(ok)ra kirajzolom, hogy annál a leosztásnál milyen százalékban nyer a felhasználó. Rivernél ennek nincs sok jelentősége, mivel ismerjük az összes lapot. Itt csak két oszlop lesz, az én, illetve az ellenfél nyerési esélye. Turn-nél 46 lap érkezhet még, így 46 oszlopunk lesz, aminél láthatjuk, hogy melyik esetben mennyi esélyünk van nyerni, ezek mellett természetesen az összesített esélyt is megjelenítem. Erre azért van szükség, hogy tisztább képet nyújtsak a felhasználó számára az esélyeiről. Egy példán keresztül megvilágítva, lehet, hogy a turn-ön 70\% esélyünk van a nyerésre, viszont, ha ez úgy adódik össze, hogy 9 esetben 100\% az esélyünk, 11 esetben 90\%, 6 esetben 80\%, a maradék 20 esetben pedig 40\%, akkor jobban át kell gondolnunk a következő lépésünket, mintha ez a 70\% egymáshoz közel álló számokból alakulna ki.
 
 Emellett, a diagrammon több konstans értéket is megjelenítek. A fent említett oszlopdiagramm sokat segít a döntés meghozásában, viszont nehezen elemezhető. Éppen ezért szemléltetem az ellenfél nyerési esélyének az átlagát, a mediánját, valamint a szórását is. Ezek további segítséget nyújtanak a felhasználónak.
 
-A diagramm alatt található egy beviteli mező, ahova egy számot adhatunk meg. Itt számolja az alkalmazás a realtív gyakoriságot, vagy más néven az empirikus valószínűséget. Tulajdonképpen az ide beütött érték előfordulásának számát kapjuk meg. Ha kíváncsiak vagyunk arra, hogy az ellenfélnek mennyi esetben van több esélye nyerni, mint 50\%, akkor beütjük azt, hogy 50, és ki fogja írni a relatív gyakoriságot. Ez az érték 0 és 1 közé eshet.
-
-% TODO: Erre szintén kellene, hogy szerepeljenek példák a dolgozat végén.
+A diagramm alatt található egy beviteli mező, ahova egy számot adhatunk meg. Itt számolja az alkalmazás a relatív gyakoriságot, vagy más néven az empirikus valószínűséget. Tulajdonképpen az ide beütött érték előfordulásának számát kapjuk meg. Ha kíváncsiak vagyunk arra, hogy az ellenfélnek mennyi esetben van több esélye nyerni, mint 50\%, akkor beütjük azt, hogy 50, és ki fogja írni a relatív gyakoriságot. Ez az érték 0 és 1 közé eshet.
 
 \Section{Felhasznált technológiák}
 
@@ -105,22 +99,23 @@ Ebben a szakaszban bemutatom az összes olyan technológiát, programozási nyel
 
 \SubSection{Egyoldalas webalkalmazások}
 
-Ha figyelemmel követjük a JavaScript keretrendszerek fejlődését, akkor láthatjuk, hogy egyre nagyobb teret kapnak az egyoldalas alkalmazások (\textit{SPA}, \textit{Single Page Application}), az olyan többoldalas alkalmazásokkal (\textit{Multi Page Application}) szemben, mint a jQuery vagy a Laravel.
-
-% TODO: A végén furcsa, hogy a jQuery (JS library) és a Laravel (PHP keretrendszer) hogy értve MPA.
+Ha figyelemmel követjük a JavaScript keretrendszerek fejlődését, akkor láthatjuk, hogy egyre nagyobb teret kapnak az egyoldalas alkalmazások (\textit{SPA}, \textit{Single Page Application}), a többoldalas alkalmazásokkal (\textit{Multi Page Application}) szemben, amiket leggyakrabban jQuery vagy Laravel segítségével készítenek. A keretrendszerek népszerűségét a \aref{fig:js-framework-popularity}. ábrán szemléltetem.
 
 Három elterjedt JavaScript keretrendszert különböztethetünk meg. A Facebook által fejlesztett React-ot, az Angular-t, amit a Google hozott létre és a Vue JS, amit Evan You fejlesztett
-\cite{vue}. %hivatkozás
+\cite{vue}.
 
-% TODO: Érdemes lenne valmilyen felmérés félét is publikálni, hogy valóban ezek az elterjedtek.
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\textwidth]{images/js-framework-popularity.png}
+	\caption{A legelterjedtebb javascript könyvtárak 2021-ben \cite{js-framework-popularity}}
+	\label{fig:js-framework-popularity}
+\end{figure}
 
 \SubSection{Vue JS}
 
 Mindhárom SPA-nak megvan a maga előnye és hátránya. Ezek közül inkább csak a Vue előnyeire koncentrálok a másik kettővel szemben. A három közül ez a legkönnyebben tanulható. Használatát aránylag könnyen el lehet sajátítani.
 
-A maga 18 KB-os méretével rendkívül kicsinek számít, amit könnyű letölteni és feltelepíteni, ennek ellenére pozitívan hat a felhasználói élményre és jó keresőmotor optimalizálással is rendelkezik. Saját virtuális DOM-ot (\textit{Document Object Model}) renderel, ami jobban teljesít, mint a React vagy az Angular. Könnyen olvasható a kódja, könnyen integrálható, jól dokumentált, és ezen kívül sok más előnye is van.
-
-% TODO: Minden állítást (például, hogy jobban teljesít) hivatkozással vagy méréssel alá kellene támasztani.
+A maga 18 KB-os méretével rendkívül kicsinek számít, amit könnyű letölteni és feltelepíteni, ennek ellenére pozitívan hat a felhasználói élményre és jó keresőmotor optimalizálással is rendelkezik. Saját virtuális DOM-ot (\textit{Document Object Model}) renderel, ami jobban teljesít, mint a React vagy az Angular \cite{benchmark}. Könnyen olvasható a kódja, könnyen integrálható, jól dokumentált, és ezen kívül sok más előnye is van.
 
 Többek között a Vue JS egyik fő tulajdonsága -- ami megvan a többi SPA-ban is -- hogy komponensekből épül fel, amiket újra felhasználhatunk, ezzel is elősegíti a rövidebb programkódot, átláthatóságot, egyszerűséget, amiket már fent említettem.
 
@@ -129,9 +124,14 @@ Ezek miatt esett a választásom a Vue JS-re, amire több forrás keretrendszerk
 
 \SubSection{Node JS és az Express}
 
-% TODO: Érdemes hivatkozni, hogy mi alapján jelenthető ki, hogy a legnépszerűbb.
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\textwidth]{images/js-popilarity.png}
+	\caption{A legelterjedtebb programozási nyelvek \cite{js-popularity}}
+	\label{fig:js-popularity}
+\end{figure}
 
-Amellett, hogy a legnépszerűbb programozási nyelv, a JavaScript az egyik leginkább univerzális szoftverfejlesztési technológia. Hagyományosan frontend fejlesztésre használták, viszont az utóbbi időben elterjedt a szerver oldali (backend) használata is. Az egyik eszköz -- és talán a legismertebb -- ami ezt az elmozdulást elősegítette az a Node JS.
+Amellett, hogy a legnépszerűbb programozási nyelv \cite{js-popularity}, a JavaScript az egyik leginkább univerzális szoftverfejlesztési technológia. Erről láthatunk egy diagrammot a \aref{fig:js-popularity}. ábrán. Hagyományosan frontend fejlesztésre használták, viszont az utóbbi időben elterjedt a szerver oldali (backend) használata is. Az egyik eszköz -- és talán a legismertebb -- ami ezt az elmozdulást elősegítette az a Node JS.
 
 A Node JS tulajdonképpen nem egy keretrendszer, nem is egy könyvtár, hanem egy futtató környezet, ami a Chrome V8-as motorján alapszik. A technológiát először 2009-ben mutatta be Ryan Dahl az Európai Javascript Konferencián. Annak ellenére, hogy ezen a konferencián rögtön elnyerte a legizgalmasabb szoftver díjat, nem volt használatos széles körben. A technológia 2017-ben csúcsosodott ki, amikor is először használta egy ismertebb cég, a LinkedIn, vagy, hogy még néhányat említsek, a Netflix, eBay és az Uber.
 

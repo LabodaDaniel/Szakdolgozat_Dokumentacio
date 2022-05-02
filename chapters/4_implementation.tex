@@ -93,6 +93,8 @@ if (sevenCards.length == 7) {
 \end{lstlisting}
 Ezek alapján az elágazás előtt nem csak definiáltam a \texttt{result} tömböt, hanem meg is határoztam a méretét. Mikor ez megvolt, át kellett alakítanom a belső \textit{foreach} ciklust, hogy az indexelést el tudjam végezni. Ennek a két feltételnek kellett teljesülnie, hogy megvalósítsam az optimalizálásnak ezt a tényezőjét.
 
+\newpage
+
 \begin{lstlisting}[style=htmlcssjs]
 let result = new Array(990);
 if (sevenCards.length == 7) {
@@ -117,6 +119,8 @@ Próbáltam minél rövidebb kódot kapni, ennek érdekében az első lépésem 
 \end{itemize}
 
 A közös részek kiszervezésével lényegesen rövidebb lett a programkód. Ezután az összes fájlban igyekeztem a függvények hosszát a minimumra csökkenteni. A leginkább szembetűnő változás a \texttt{findStrongest.js} függvényében történt. Az optimalizálás előtt 80 soros volt, az optimalizálás során pedig sikerült lecsökkenteni 30 sorosra. Ezt az összesen 110 sor programkódot nem szemléltetném, inkább csak a leglényegesebb részt. Az eddigi 2 külön függvényből lett 5, amiből a legtöbb változást a \texttt{createStrongest} függvény hozta.
+
+\newpage
 
 \begin{lstlisting}[style=htmlcssjs]
 function createStrongest(combinations){
@@ -189,6 +193,12 @@ A diagramm helyes működésének a vizsgálata már bonyolultabb folyamat. Ebbe
 
 Ennek megfelelően kiválasztottam a felhasználó lapjainak a káró 2-est és 3-mast, az asztalra pedig a treff ászt, királyt, dámát, és bubit. Ezután legeneráltam a diagrammot, ami \aref{fig:chart-test}. ábrán látható. Az \texttt{everyCards} tömbben növekő sorrendben helyezkednek el a lapok, először a treff, majd a káró, kör, végül pedig a pikk. A lapokból az látszik, hogy ha bármelyik treff következik a river-nél, akkor a board-on flush alakulna ki, ha a treff 10-es érkezne, akkor pedig royal flush. Ezen kívül, ha bármilyen 10-es érkezne, akkor sor alakulni ki a board-on, ami szintén a felhasználónak kedvez. A kézben lévő lapok a lehető legalacsonyabbak, illetve nem alakulhat ki belőle flush, sor, de még csak egy drill sem. Ha nem érkezik több treff, akkor a legmagasabb kezünk, ami lehet, az egy hármas pár, viszont ez sem mondható erősnek, mivel az asztalon csupa magas lap van. 
 
+Ezeket a tényeket mutatja be \aref{fig:chart-test}. ábrán kirajzolt diagramm. A piros oszlopok a felhasználó nyerési esélyeit mutatják, a kékek pedig az ellenfelét. Jól látszik, hogy az első kilenc kártyánál nagyon magas a nyerési esélye a felhasználónak. Ezek a maradék treff lapok a pakliban, az utolsó pedig a treff 10-es, aminél 100\% az esély a győzelemre. A többi lapra három kivétellel mindegyiknél az ellenfélnek nagyobb az esélye. Ez a három lap a maradék 10-esek a pakliban, amelyekkel sor alakulna ki a board-on. A lila konstans mutatja az ellenfél esélyeinek mediánját, a sárga az átlagát, a szürkék pedig a szórását. Ezek mind segítik a felhasználót a döntéshozásban. A jelmagyarázatot a diagramm tetején találjuk. Angolul jelennek meg a feliratok, mivel viszonylag kevés szöveget jelenítek meg az alkalmazásban, ezek pedig nem bonyolultak, így jobbnak láttam, ha a szimuláció fülön minden felirat egységesen angol.
+
+Az utolsó funkció, aminek meg kell vizsgálnom a helyes működését, az a relatív gyakoriság számítása. Ezt azért implementáltam az alkalmazásomba, mert nagyon jól mutatja a valós esélyeket. Nem mindegy, hogy egy adott százalékos esély hogyan épül fel. Ezzel a funkcióval viszont le lehet kérdezni, hogy például milyen gyakorisággal van 10\% alatt a nyerési esélyünk. Ha ez a szám viszonylag magas, akkor az azt jelzi nekünk, hogy sok olyan kártya érkezhet, amivel kevés nyerési esélyünk van.
+
+A fenti példánál maradva mutatom be ennek a helyes működését, amit a diagramm kirajzolásához is használtam. A \aref{fig:chart-test}. ábra jól mutatja, hogy elég nagy szórása van a felhasználó nyerési esélyeinek a különböző lapokra levetítve. Hiába nagy eséllyel nyerünk az összes treffel, valamint tízessel, ha a maradék lapoknál szinte esélytelenek vagyunk. Éppen erre való a relatív gyakoriság. Mivel nem túl gyakori, hogy több maradék lapnál is ugyan akkora az esély a győzelemre, így azt állítottam be, hogy a megadott szám alatt lévő összes esélyt számolja bele a gyakoriságba. A tesztelésre kiválasztottam a 40\%-ot. Jól látható, hogy 34 olyan kártya van, aminek az érkezésekor 40\% alatti esélye lesz a felhasználónak a nyerésre. \[(100/46)\cdot 34 = 73,91\%\] a 40\% alatti nyerési esélyek. Az alkalmazásom is 0,7391-et adott vissza, így ez is helyesen működik.
+
 \begin{figure}[h] 
 	\centering
 	\includegraphics[width=\textwidth]{images/chart-test.png}
@@ -196,6 +206,15 @@ Ennek megfelelően kiválasztottam a felhasználó lapjainak a káró 2-est és 
 	\label{fig:chart-test}
 \end{figure}
 
-% TODO: Érdemes indokolni, hogy miért angolul vannak a tetején a feliratok.
+\Section{Az alkalmazásom és a becslős módszer összehasonlítása}
+A dolgozatom elején, a 2.2. szakaszban írtam arról, hogy létezik egy technika, amellyel a profi játékosok számolják a nyerési esélyüket. Ezt a módszert összevetem az általam megvalósított megoldással és kiértékelem az eredményeket. Két példán keresztül mutatom be az eltéréseket, az egyiknél viszonylag sok out lesz, amivel javul a "kezünk", a másiknál pedig kevesebb.
 
-Ezeket a tényeket mutatja be \aref{fig:chart-test}. ábrán kirajzolt diagramm. A piros oszlop a felhasználó nyerési esélyeit mutatják, a kékek pedig az ellenfelét. Jól látszik, hogy az első kilenc kártyánál nagyon magas a nyerési esélye a felhasználónak. Ezek a maradék treff lapok a pakliban, az utolsó pedig a treff 10-es, aminél 100\% az esély a győzelemre. A többi lapra három kivétellel mindegyiknél az ellenfélnek nagyobb az esélye. Ez a három lap a maradék 10-esek a pakliban, amelyekkel sor alakulna ki a board-on. A lila konstans mutatja az ellenfél esélyeinek mediánját, a sárga az átlagát, a szürkék pedig a szórását. Ezek mind segítik a felhasználót a döntéshozásban.
+Vegyük előszőr, hogy a fehasználó lapjai, a treff ász és király. Az asztalon flop-ig a treff 7-es és 2-es, valamint a kör dáma érkezik. Ebben az esetben a felhasználónak nincs semmije, csak egy király magas lapja, viszont ha érkezne még egy treff, akkor flush-e lenne, valamint ha egy ász vagy egy király jönne, akkor is elég erős keze lenne, hogy azt feltételezzük, nyerne. Ezek alapján kiszámoljuk a jókat, vagyis az out-okat. 13 treff van a pakliban, ebből mi 4-et látunk, tehát maradt 9 lap, ezek jók. Egy-egy ász és király van a kezünkben, tehát marad 3-3 további jónk. Így az out-ok száma 15. A már tárgyalt megoldás szerint a profik a következőképpen számolják az esélyüket. 
+\[15(out-ok\quad sz\Acute{a}ma)\cdot2(konstans)\cdot2(\Acute{e}rkez\h{o}\quad lapok\quad sz\Acute{a}ma)\]
+Ennek az eredménye 60\%, az alkalmazásom pedig 72,3\%-ot mutat. Turn-nél kiválasztom a kör 5-öst, így ugyan az a helyzet, mint flop-nál, 15 jónk van. A számítási mód is csak abban különbözik, hogy a végén nem 2-vel, hanem csak 1-el szorozzuk meg. Így a becslés 30\%-ot, a programom pedig 58,02\%.ot mutat.
+
+Megvilágítanám ennek a módszernek a hiányosságát egy másik példán keresztül is. A felhasználó káró 2-est és 3-mast kap. A flop pedig a pikk 2-es, kör ász, és treff dáma. A profik által használt módszerhez ki kell számolnunk az out-okat. Itt már koránt sem olyan egyszerű a dolgunk, mint az előző példánál, mivel nem tudjuk, hogy mi számít nyerő "kéznek". Feltehetjük azt is, hogy a 2-es párral jó esély van a győzelemre, ha senkinek nincs semmije. Az out-okba viszont azok a lapok tartoznak, melyekkel javulni lehet. Így minden 2-es, és minden 3-mas jónak számít, ezen kívül más nem. Tehát a jók száma 5. Így a becsült nyerési esély 20\%, a programé pedig 53,11\%. Ha kiválasztok még egy treff bubit, akkor pedig csak 10\% a becsült, az alkalmazásom által számolt nyerési esély pedig 45,7\%.
+
+A két fenti példából az látszik, hogy jelentősen eltér a két számítási eredmény egymástól. Ennek legfőbb oka az, hogy a becslési módszer csak azokat a kártyákat számolja, amivel erős "kezük" alakulna ki. Ezzel ellentétben az én módszerem az összes lehetséges lapkombinációt számításba veszi, és ez alapján számol egy esélyt. Ez a módszer nem számol azzal a lehetőséggel, hogy az első példában egy ász magas lap, vagy a második példában egy kettes pár is elegendő lehet a győzelemre. Sőt, az első esetnél, ha semmilye nincs az ellenfélnek, akkor bármilyen lapja lehet, mindig a felhasználó nyer, mivel nála van a legmagasabb lap. Kivéve, ha az ellenfélnél is egy ász-király kombináció lenne. A második példára ez még jobban igaz. Ott még egy párja is van a játékosnak, az ellenfélnek pedig mindenképp kell legalább egy pár, hogy ő nyerjen.
+
+A másik probléma ezzel a megoldással, hogy ez csak egy közelítő értéket ad. Az élő póker játszmáknál nincs idő bonyolult képletekkel számolni, hogy megkapjuk az adott nyerési esélyünket. Éppen ezért ez egy leegyszerűsített változat, amit a gyakorlatban is lehet alkalmazni. Az általam fejlesztett szoftver egy pontos eredményt ad, így azzal könnyebb a felhasználónak döntést hozni a következő lépéséről.

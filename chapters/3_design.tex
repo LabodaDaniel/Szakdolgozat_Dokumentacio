@@ -263,7 +263,7 @@ function createStrongest(combinations){
 }
 \end{lstlisting}
 
-A \texttt{strengthOrder} változóban eltárolom az adathalmazt. Egy \textit{foreach} ciklussal végig megyek mind a 21 kombináción. A cikluson belül ellenőrzöm, hogy a lapok között hány egyforma színű lap van, hiszen ha mind az 5 egyforma színű, akkor az olyan értékek közt is keresni kell, ahol számít a szín, tehát fulsh, esetleg színsorok. Itt a \texttt{sortCardOrder} függvény is szerepet játszik, itt rendezem abc sorrendbe a lapokat, illetve szúrok közé egy F betűt is, amennyiben figyelembe kell vennünk, hogy azonos színűek a lapok. A megkapott 21 lap értékével feltöltök egy tömböt, ezek után a függvény visszatér ennek a minimumával, ami a felhasználó lapjának az értéke lesz, ezt adom át a forntend-nek.
+A \texttt{strengthOrder} változóban eltárolom az adathalmazt. Egy \textit{foreach} ciklussal végig megyek mind a 21 kombináción. A cikluson belül ellenőrzöm, hogy a lapok között hány egyforma színű lap van, hiszen ha mind az 5 egyforma színű, akkor az olyan értékek közt is keresni kell, ahol számít a szín, tehát flush, esetleg színsorok. Itt a \texttt{sortCardOrder} függvény is szerepet játszik, itt rendezem abc sorrendbe a lapokat, illetve szúrok közé egy F betűt is, amennyiben figyelembe kell vennünk, hogy azonos színűek a lapok. A megkapott 21 lap értékével feltöltök egy tömböt, ezek után a függvény visszatér ennek a minimumával, ami a felhasználó lapjának az értéke lesz, ezt adom át a forntend-nek.
 
 Turn-nél a kapott tömb hosszúsága 6, azaz még egy lapra várunk, amely nem ismert. Ebben az esetben ugyanazt kell tenni, mint a river esetében, egy kiegészítéssel. Mivel egy lapra még várunk, így végig kell menni egy ciklussal az összes pakliban maradt kártyán, melyekkel kiegészítem a kapott tömböt, és elvégzem ugyanazokat a számításokat, amiket a river-nél is. Mivel 46 lap maradt a pakliban, így 46 értékkel tér vissza a függvény, ezeket adom át a frontend-nek.
 
@@ -319,9 +319,7 @@ function createEnemysPossibleHands(allCards, sevenCardsName) {
 }
 \end{lstlisting}
 
-Ez a függvény megkapja az összes kártyát, ami még a pakliban maradt, valamint a kiválasztott hét lapot. A maradék lapokon végigmegy egy ciklussal és kiválasztja belőle az összes 2-es lap kombinációját, szintén a \texttt{generatorics} JavaScript könyvtár segítségével. Ezután ehhez a 2 laphoz hozzáfűzi a kapott tömb utolsó 5 elemét, hiszen ezek a közös lapok, amikkel keze alakulhat ki ellenfelünknek. Ezekkel az értékekkel visszatér.
-
-% TODO: A generatorics függvénykönyvtárat érdemes lenne majd hivatkozni.
+Ez a függvény megkapja az összes kártyát, ami még a pakliban maradt, valamint a kiválasztott hét lapot. A maradék lapokon végigmegy egy ciklussal és kiválasztja belőle az összes 2-es lap kombinációját, szintén a \texttt{generatorics} \cite{generatorics} JavaScript könyvtár segítségével. Ezután ehhez a 2 laphoz hozzáfűzi a kapott tömb utolsó 5 elemét, hiszen ezek a közös lapok, amikkel keze alakulhat ki ellenfelünknek. Ezekkel az értékekkel visszatér.
 
 A \texttt{default} függvényben egy \textit{foreach} ciklussal végig megyünk ezeken a 7 lapos kombinációkon. A cikluson belül hasonló módon, mint a felhasználó esélyeinek számításánál, legenerálom a 7-es kombinációkból az 5-ös kombinációkat, majd a legkisebb értékűvel számolok tovább. Így 990 értéket fogok kapni, az összes lehetséges 2 lapra, ami az ellenfélnél lehet. Ezután frontend-en már csak annyi a teendő, hogy összehasonlítsam a felhasználó lapjainak értékét ezzel a 990-el, és megkapom, hogy hány százalék esélye van nyerni a felhasználónak.
 
