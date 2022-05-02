@@ -4,22 +4,29 @@
 
 \vskip 1cm
 
-A CD gyökerében lévő szakdolgozat jegyzékben két jegyzék található. A dolgozat, és a program jegyzék. 
+\noindent A CD gyökerében lévő szakdolgozat jegyzékben két jegyzék található. A \texttt{dolgozat}, és a \texttt{program} jegyzék. 
+\begin{itemize}
+\item A \texttt{dolgozat} jegyzékben található a dolgozat \LaTeX\ forráskódja, és a dolgozat PDF formátumban \texttt{dolgozat.pdf} néven. 
+\item A \texttt{program} jegyzékben található a webalkalmazás forráskódja.
+\end{itemize}
 
-A dolgozat jegyzékben található a dolgozat LaTeX forráskódja, és a .pdf formátuma is, dolgozat.pdf néven. 
+\bigskip
 
-A program jegyzékben található a webalkalmazás forráskódja. 
+\noindent Az alkalmazás indításához fel kell telepíteni a Node.js-t.\\
+(Ez például a https://nodejs.org/en/ oldalról letöltve telepíthető.)
 
-Fel kell telepíteni a node.js-t, amit a https://nodejs.org/en/ oldalról lehet letölteni.
+\bigskip
 
-Node.js telepítése után, a parancssorban a következő utasítást kiadva: \texttt{npm install vue} feltelepül a Vue.js keretrendszer.
+\noindent A Node.js telepítése után, a parancssorban a következő utasítást kiadva:
+\begin{verbatim}
+    npm install vue
+\end{verbatim}
+feltelepül a Vue.js keretrendszer.
 
-
-Miután elkészültünk ezekkel, a program jegyzékben találunk egy frontend és egy backend jegyzéket. Mind a két jegyzékben ki kell adni az alábbi parancsokat: 
+Miután elkészültünk ezekkel, a program jegyzékben találunk egy \texttt{frontend} és egy \texttt{backend} jegyzéket. Mind a két jegyzékben ki kell adni az alábbi parancsokat: 
 \begin{itemize}
     \item \texttt{npm install}
     \item \texttt{npm run serve}
 \end{itemize}
 
-
-A frontend jegyzék parancssorában megjelenő ://Localhost címen fogjuk elérni a programot a böngészőnkből.
+A \texttt{frontend} jegyzék parancssorában megjelenő \texttt{//Localhost} címen fogjuk elérni a programot a böngészőnkből.

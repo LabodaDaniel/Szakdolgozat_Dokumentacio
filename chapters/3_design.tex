@@ -1,6 +1,6 @@
 \Chapter{Tervezés és implementáció}
 
-Ebben a fejezetben bemutatom az elkészült programot a számomra legérdekesebb programrészletekkel. Nem térek ki minden funkcióra és programkódra, csak a lényegesebb egységekre. Részletezem a frontend kivitelezését, amelybe tartozik a Vue JS, HTML és CSS kódok. Ezután a backend számításokat mutatom be, amelyet Node JS környezetben valósítottam meg.
+Ebben a fejezetben bemutatom az elkészült programot a számomra legérdekesebb programrészletekkel. Nem térek ki minden funkcióra és programkódra, csak a lényegesebb egységekre. Részletezem a frontend kivitelezését, amelybe tartoznak a Vue JS, HTML és CSS forráskódok. Ezután a backend számításokat mutatom be, amelyet Node JS környezetben valósítottam meg.
 
 \Section{A projekt felépítése}
 
@@ -15,7 +15,7 @@ Mielőtt belekezdek a megoldásaim, függvények, programkódok részletezéséb
 
 A webalkalmazás frontend részét a már említett Vue JS-ben valósítottam meg. Ebben vannak a komponensek és a vue-router, amely az oldalak közti navigációt végzi el. A frontend és a backend közötti kommunikációt egy API adja meg. A JSON adatbázis lokálisan helyezkedik el és csak a backend kommunikál vele, illetve használja a számításokhoz.
 
-\Aref{fig:frontend-backend-arch}. ábrán látható az elkészült projekt struktúrája fájl rendszer szinten.
+\Aref{fig:frontend-backend-arch}. ábrán látható az elkészült projekt struktúrája fájlrendszer szinten.
 
 \begin{figure}[h]
 	\centering
@@ -30,22 +30,22 @@ A \texttt{router} mappában lévő \texttt{index.js} fájlban vannak definiálva
 
 Ezeken kívül a \texttt{main.js}-ben importálni kell minden olyan kiegészítőt, melyet használok az alkalmazásban, valamint a Firebase config része is itt van definiálva. Fontosak még az CSS fájlok. Ezeket importálom be az egyes oldalakon, hogy a megfelelő megjelenést kölcsönözzem nekik. Ezeken kívül a \texttt{package.json} és \texttt{package-lock.json} file-okban meg vannak adva a felhasznált technológiák verziója, hogy ne legyen köztük ütközés.
 
-\Aref{fig:frontend-backend-arch}. ábra jobb oldalán látható az alkalmazás back end része. Itt az architektúra jóval egyszerűbb. Két JSON adathalmazt hoztam létre; az egyik a kártyák erősségét tárolja, a másik a preflop esélyeket, mind a kettőben egy-egy objektum helyezkedik el. Itt is megtalálható a \texttt{package.json} és a \texttt{package-lock.json}, ezek ugyanazt a szerepet töltik be, mint a front end-nél. Az \texttt{index.js} is hasonló mint, a front end-en, itt is be kell importálni minden felhasznált technológiát, valamint megadni, hogy milyen porton fusson a szerver. Erre azért van szükség, hogy a localhost-on futtatott kliens és szerver ne kavarodjon össze.
+\Aref{fig:frontend-backend-arch}. ábra jobb oldalán látható az alkalmazás backend része. Itt az architektúra jóval egyszerűbb. Két JSON adathalmazt hoztam létre; az egyik a kártyák erősségét tárolja, a másik a preflop esélyeket, mind a kettőben egy-egy objektum helyezkedik el. Itt is megtalálható a \texttt{package.json} és a \texttt{package-lock.json}, ezek ugyanazt a szerepet töltik be, mint a front end-nél. Az \texttt{index.js} is hasonló mint, a front end-en, itt is be kell importálni minden felhasznált technológiát, valamint megadni, hogy milyen porton fusson a szerver. Erre azért van szükség, hogy a localhost-on futtatott kliens és szerver ne kavarodjon össze.
 
 A \texttt{findStrongest.js}-ben azok a kódok vannak, melyek a felhasználó esélyeit vizsgálják, a \texttt{findEnemyStrongest.js}-ben pedig azok, amik az ellenfél esélyeit. A \\ \texttt{helperFunctions.js} arra szolgál, hogy a több helyen meghívott függvényeket eltárolja, így azokat nem kell többször megírni. Végül a \texttt{root.js}-ben két POST \texttt{response} helyezkedik el, így történik az adatátvitel a kliens részére.
 
-Az osztály diagrammon bemutatom, hogy nagy vonalakban milyen adatokkal, függvényekkel és a hozzájuk kapcsolódó paraméterlistákkal dolgoztam. Ez \aref{fig:class-model}. ábrán látható.
+Az osztály diagramon bemutatom, hogy nagy vonalakban milyen adatokkal, függvényekkel és a hozzájuk kapcsolódó paraméterlistákkal dolgoztam. Ez \aref{fig:class-model}. ábrán látható.
 
 \begin{figure}[h]
 	\centering
 	\includegraphics[scale=1]{images/class-model.png}
-	\caption{Az alkalmazás osztály diagrammja}
+	\caption{Az alkalmazás osztály diagramja}
 	\label{fig:class-model}
 \end{figure}
 
 \noindent A kék elem a klienst szemlélteti, a sárgák pedig a szervert hivatottak bemutatni.
 
-Az adatok mindenhol tartalmazzák a \texttt{sevenCards} és az \texttt{everyCards} adatokat, kivéve a \texttt{helperFunctions}-nál, hiszen onnan csak meghívom a függvényeket. A frontend oldalon továbbá jelen van a \texttt{myCards} is, erre az esélyek ábrázolása miatt van szükség. Itt jelenítem meg a diagrammokat a \texttt{chartCalc} függvénnyel. A \texttt{chooseCard} függvény veszi ki a lapokat a pakliból, amit majd továbbadok a szervernek, valamint a lapok megjelenítésében is szerepet játszik. A két backend függvény pedig két POST \texttt{request}-et tartalmaz.
+Az adatok mindenhol tartalmazzák a \texttt{sevenCards} és az \texttt{everyCards} adatokat, kivéve a \texttt{helperFunctions}-nál, hiszen onnan csak meghívom a függvényeket. A frontend oldalon továbbá jelen van a \texttt{myCards} is, erre az esélyek ábrázolása miatt van szükség. Itt jelenítem meg a diagramokat a \texttt{chartCalc} függvénnyel. A \texttt{chooseCard} függvény veszi ki a lapokat a pakliból, amit majd továbbadok a szervernek, valamint a lapok megjelenítésében is szerepet játszik. A két backend függvény pedig két POST \texttt{request}-et tartalmaz.
 
 A sárga részeken találhatóak azok az adatok és függvények, amik az esélyek számolásáért felelősek. A teljesség igénye nélkül, itt számolom a lehetséges érkező lapokat, ezekre az értékeket, sorba rendezem a lapokat, leszűkítem csak a nevekre, és egyéb lent látható eseményeket.
 
@@ -145,7 +145,7 @@ A függvény elején rögtön egy feltétel van, ami ellenőrzi, hogy ne rakhass
 
 Ezen kívül a kiválasztott lapot belerakjuk a \texttt{sevenCards} globális objektumba, melyet majd továbbadunk a backend-nek, hogy végezze el a számításokat. Továbbá tartalmaz pár egyéb külső változót is, melyek a színek és lapok megjelenítéséért felelnek.
 
-A másik lényeges rész ezen az oldalon az esélyeket megjelenítő diagramm. Ez is egy külön komponens, viszont itt töltöm fel adatokkal. A backend-től megkapjuk az összes következő lapra számolt esélyt. Az ellenfélnek mindig 990-szer több esete lesz, hiszen nem ismerjük a lapjait. Emiatt a mi esélyeink első esetét össze kell hasonlítani az ellenfél első 990 esetével, ebből kapunk egy százalékos esélyt, amely majd az első oszlopunk lesz a diagrammon, és így tovább. 
+A másik lényeges rész ezen az oldalon az esélyeket megjelenítő diagram. Ez is egy külön komponens, viszont itt töltöm fel adatokkal. A backend-től megkapjuk az összes következő lapra számolt esélyt. Az ellenfélnek mindig 990-szer több esete lesz, hiszen nem ismerjük a lapjait. Emiatt a mi esélyeink első esetét össze kell hasonlítani az ellenfél első 990 esetével, ebből kapunk egy százalékos esélyt, amely majd az első oszlopunk lesz a diagramon, és így tovább. 
 
 Ezek mellett még olyan matematikai értékeket is számolok, mint az átlag, a medián vagy a szórás, melyek közül szerintem az utóbbi a legérdekesebb.
 
@@ -263,7 +263,7 @@ function createStrongest(combinations){
 }
 \end{lstlisting}
 
-A \texttt{strengthOrder} változóban eltárolom az adathalmazt. Egy \textit{foreach} ciklussal végig megyek mind a 21 kombináción. A cikluson belül ellenőrzöm, hogy a lapok között hány egyforma színű lap van, hiszen ha mind az 5 egyforma színű, akkor az olyan értékek közt is keresni kell, ahol számít a szín, tehát flush, esetleg színsorok. Itt a \texttt{sortCardOrder} függvény is szerepet játszik, itt rendezem abc sorrendbe a lapokat, illetve szúrok közé egy F betűt is, amennyiben figyelembe kell vennünk, hogy azonos színűek a lapok. A megkapott 21 lap értékével feltöltök egy tömböt, ezek után a függvény visszatér ennek a minimumával, ami a felhasználó lapjának az értéke lesz, ezt adom át a forntend-nek.
+A \texttt{strengthOrder} változóban eltárolom az adathalmazt. Egy \textit{foreach} ciklussal végig megyek mind a 21 kombináción. A cikluson belül ellenőrzöm, hogy a lapok között hány egyforma színű lap van, hiszen ha mind az 5 egyforma színű, akkor az olyan értékek közt is keresni kell, ahol számít a szín, tehát flush, esetleg színsorok. Itt a \texttt{sortCardOrder} függvény is szerepet játszik, itt rendezem ábécé sorrendbe a lapokat, illetve szúrok közé egy F betűt is, amennyiben figyelembe kell vennünk, hogy azonos színűek a lapok. A megkapott 21 lap értékével feltöltök egy tömböt, ezek után a függvény visszatér ennek a minimumával, ami a felhasználó lapjának az értéke lesz, ezt adom át a frontend-nek.
 
 Turn-nél a kapott tömb hosszúsága 6, azaz még egy lapra várunk, amely nem ismert. Ebben az esetben ugyanazt kell tenni, mint a river esetében, egy kiegészítéssel. Mivel egy lapra még várunk, így végig kell menni egy ciklussal az összes pakliban maradt kártyán, melyekkel kiegészítem a kapott tömböt, és elvégzem ugyanazokat a számításokat, amiket a river-nél is. Mivel 46 lap maradt a pakliban, így 46 értékkel tér vissza a függvény, ezeket adom át a frontend-nek.
 
